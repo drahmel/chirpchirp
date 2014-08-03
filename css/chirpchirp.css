@@ -1,0 +1,54 @@
+.panel {
+	padding:20px;
+	background-color:rgba(0,255,0,.5);
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	min-height:400px;
+}
+.logotype {
+	font-family: 'Quicksand', sans-serif;
+	font-weight: 400;
+	font-size: 64px;
+	letter-spacing:-6px;
+	line-height:48px;
+}
+.boid-row {
+	width: 100%;
+}
+.boid-col {
+	padding: 0px 6px;
+	float: left;
+}
+.boid-name {
+	float: left;
+	width: 150px;
+	overflow: hidden;
+}
+.gender {
+	float:left;
+	width: 12px;
+	height: 12px;
+}
+.gender-male {
+	float:left;
+	color: white;
+	background-color: blue;
+}
+.gender-female {
+	float:left;
+	color: black;
+	background-color: pink;
+}
+.alive {
+	float: left;
+	width: 12px;
+	height: 12px;
+	background: green;
+}
+.dead {
+	float: left;
+	width: 12px;
+	height: 12px;
+	background: black;
+}
+
