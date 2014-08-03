@@ -10,10 +10,10 @@ Since ChirpChirp uses Firebase for data storage, it can be run even from a file 
 Applying natural selection and genetic algorithms to tweets and retweets
 
 Run at the command line with:
-```node webserver.js```
+`node webserver.js`
 
 Then access in a browser:
-```http://localhost:8888/```
+`http://localhost:8888/`
 
 ## Getting Started -- Installation
 
