@@ -1,17 +1,59 @@
 var chromosomes = {};
 
 function fsm() {
-	this.activeState = undefined;
+	var activeState = undefined;
 
 	this.setState = function(state) {
-		this.activeState = state;
+		activeState = state;
 	};
 	this.update = function(state) {
-		if(this.activeState != undefined) {
-			this.activeState();
+		console.log("Active State");
+		if(activeState != undefined) {
+			console.log("Active State: "+activeState);
+			activeState();
 		}
 	};
 }
+function bee() {
+	var energy = 20;
+	var brain;
+
+	var eating = function() {
+		energy++;
+		if(energy > 20) {
+			console.log("Start working");
+			brain.setState(working);
+		}
+	}
+	var working = function() {
+		energy--;
+		if(energy < 10) {
+			console.log("Start working");
+			brain.setState(eating);
+		}
+	}
+
+	this.sleeping = function() {
+
+	}
+	this.mating = function() {
+
+	}
+	this.update = function() {
+		console.log("Bee update"+energy);
+		brain.update();
+	}
+	this.init = function() {
+
+
+		brain = new fsm();
+		brain.setState(working);
+	}
+
+
+}
+
+
 function ant() {
 	this.position = {x:0, y:0};
 	this.lead = {x:100, y:200};
@@ -215,10 +257,14 @@ function idleBoids() {
 			female = false;
 		}
 	}
+	document.bee.update();
 }
 $(document).ready(function() {
 	document.boids = {};
-	setInterval(idleBoids, 1000);
+	document.bee = new bee();
+	document.bee.init();
+
+	setInterval(idleBoids, 5000);
 });
 
 creaturesRef.on('child_added', function(snapshot) {
