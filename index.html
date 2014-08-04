@@ -55,6 +55,49 @@ $(document).ready(function() {
 	console.log(chromosomes);
 	chromosomes['looks'].addInputs();
 });
+
+$('#addCreature').click(function (e) {
+	if(false) {
+		creaturesRef.update({
+			c3: {
+				name: "Harry",
+				gender: "m",
+				alive: 1,
+				birthTime: getLinuxTime(),
+				temperature: parseInt(Math.nrand(75, 5)),
+				chromosomes: {
+					looks: {
+						EyesBrownBlue: "AA",
+						HairBrownBlond: "AA",
+					},
+					speed: {},
+					personality: {}
+				}
+			},
+		});
+	} else {
+		creaturesRef.push(
+			{
+				name: "Pam",
+				gender: "f",
+				alive: 1,
+				birthTime: getLinuxTime(),
+				temperature: parseInt(Math.nrand(75, 5)),
+				chromosomes: {
+					looks: {
+						EyesBrownBlue: "AA",
+						HairBrownBlond: "AA",
+					},
+					speed: {},
+					personality: {}
+				}
+			}
+		);
+
+	}
+
+});
+
 </script>
       </body>
 </html>

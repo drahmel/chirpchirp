@@ -1,3 +1,6 @@
+var Firebase = require('firebase');
+
+
 var chromosomes = {};
 
 function fsm() {
@@ -20,7 +23,7 @@ function bee() {
 
 	var eating = function() {
 		energy++;
-		console.log("Sleep energy: "+energy);
+		//console.log("Sleep energy: "+energy);
 		if(energy > 20) {
 			console.log("Start working");
 			brain.setState(working);
@@ -29,7 +32,7 @@ function bee() {
 	var working = function() {
 		energy--;
 		mateEnergy += 0.3;
-		console.log("Work energy: "+energy+" Mate energy:"+mateEnergy);
+		//console.log("Work energy: "+energy+" Mate energy:"+mateEnergy);
 		if(mateEnergy > 10) {
 			console.log("Start mating");
 			mateCount = 3;
@@ -183,47 +186,6 @@ $('#messageInput').keypress(function (e) {
 	}
 });
 */
-$('#addCreature').click(function (e) {
-	if(false) {
-		creaturesRef.update({
-			c3: {
-				name: "Harry",
-				gender: "m",
-				alive: 1,
-				birthTime: getLinuxTime(),
-				temperature: parseInt(Math.nrand(75, 5)),
-				chromosomes: {
-					looks: {
-						EyesBrownBlue: "AA",
-						HairBrownBlond: "AA",
-					},
-					speed: {},
-					personality: {}
-				}
-			},
-		});
-	} else {
-		creaturesRef.push(
-			{
-				name: "Pam",
-				gender: "f",
-				alive: 1,
-				birthTime: getLinuxTime(),
-				temperature: parseInt(Math.nrand(75, 5)),
-				chromosomes: {
-					looks: {
-						EyesBrownBlue: "AA",
-						HairBrownBlond: "AA",
-					},
-					speed: {},
-					personality: {}
-				}
-			}
-		);
-
-	}
-
-});
 function createBoid(mother, father) {
 	var gender = 10*Math.random() > 4 ? 'm' : 'f';
 	var temperature = parseInt(Math.nrand(75, 5));
@@ -276,13 +238,6 @@ function idleBoids() {
 	}
 	document.bee.update();
 }
-$(document).ready(function() {
-	document.boids = {};
-	document.bee = new bee();
-	document.bee.init();
-
-	setInterval(idleBoids, 1000);
-});
 
 creaturesRef.on('child_added', function(snapshot) {
 	var boid = snapshot.val();
@@ -309,12 +264,22 @@ creaturesRef.on('child_added', function(snapshot) {
 	}
 	out += "<div class='boid-col "+live+"'>"+"</div>";
 	out += '</div><div style="clear:both;"></div>';
-	$(out).appendTo($('#noids'));
-	$("#txtMessage").text($('#noids').children('.boid-row').length + " boids");
+	/*
+		$(out).appendTo($('#noids'));
+		$("#txtMessage").text($('#noids').children('.boid-row').length + " boids");
+	*/
 });
 function displayChatMessage(name, text) {
 	$('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#noids'));
 	$('#noids')[0].scrollTop = $('#noids')[0].scrollHeight;
 };
 
+var document = {};
+//$(document).ready(function() {
+	document.boids = {};
+	document.bee = new bee();
+	document.bee.init();
+
+	setInterval(idleBoids, 1000);
+//});
 
