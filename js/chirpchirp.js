@@ -7,19 +7,20 @@ function fsm() {
 		activeState = state;
 	};
 	this.update = function(state) {
-		console.log("Active State");
 		if(activeState != undefined) {
-			console.log("Active State: "+activeState);
 			activeState();
 		}
 	};
 }
 function bee() {
 	var energy = 20;
+	var mateEnergy = 0.0;
+	var mateCount = 3;
 	var brain;
 
 	var eating = function() {
 		energy++;
+		console.log("Sleep energy: "+energy);
 		if(energy > 20) {
 			console.log("Start working");
 			brain.setState(working);
@@ -27,8 +28,14 @@ function bee() {
 	}
 	var working = function() {
 		energy--;
-		if(energy < 10) {
-			console.log("Start working");
+		mateEnergy += 0.3;
+		console.log("Work energy: "+energy+" Mate energy:"+mateEnergy);
+		if(mateEnergy > 10) {
+			console.log("Start mating");
+			mateCount = 3;
+			brain.setState(mating);
+		} else if(energy < 10) {
+			console.log("Start eating");
 			brain.setState(eating);
 		}
 	}
@@ -36,11 +43,21 @@ function bee() {
 	this.sleeping = function() {
 
 	}
-	this.mating = function() {
+	mating = function() {
+		mateCount--;
+		if(mateCount < 1) {
+			mateEnergy = 0.0;
+			console.log("Start eating");
+			brain.setState(eating);
+		} else if(mateCount == 1) {
+			console.log("Creating boid");
+			var male = false;
+			var female = false;
+			createBoid(male, female);
+		}
 
 	}
 	this.update = function() {
-		console.log("Bee update"+energy);
 		brain.update();
 	}
 	this.init = function() {
@@ -264,7 +281,7 @@ $(document).ready(function() {
 	document.bee = new bee();
 	document.bee.init();
 
-	setInterval(idleBoids, 5000);
+	setInterval(idleBoids, 1000);
 });
 
 creaturesRef.on('child_added', function(snapshot) {
