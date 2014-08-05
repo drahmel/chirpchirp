@@ -1,5 +1,10 @@
-var Firebase = require('firebase');
-
+// Check if running as Node
+var nodejs = false;
+if (typeof window === 'undefined') {
+	nodejs = true;
+	var Firebase = require('firebase');
+	var document = {};
+}
 
 var chromosomes = {};
 
@@ -64,8 +69,6 @@ function bee() {
 		brain.update();
 	}
 	this.init = function() {
-
-
 		brain = new fsm();
 		brain.setState(working);
 	}
@@ -264,17 +267,16 @@ creaturesRef.on('child_added', function(snapshot) {
 	}
 	out += "<div class='boid-col "+live+"'>"+"</div>";
 	out += '</div><div style="clear:both;"></div>';
-	/*
+	if(!nodejs) {
 		$(out).appendTo($('#noids'));
 		$("#txtMessage").text($('#noids').children('.boid-row').length + " boids");
-	*/
+	}
 });
 function displayChatMessage(name, text) {
 	$('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#noids'));
 	$('#noids')[0].scrollTop = $('#noids')[0].scrollHeight;
 };
 
-var document = {};
 //$(document).ready(function() {
 	document.boids = {};
 	document.bee = new bee();
