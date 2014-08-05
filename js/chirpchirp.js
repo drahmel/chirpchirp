@@ -6,6 +6,32 @@ if (typeof window === 'undefined') {
 	var document = {};
 }
 
+var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
+var creaturesRef = myDataRef.child("creatures2");
+
+function getLinuxTime() {
+	return Math.round((new Date()).getTime() / 1000);
+}
+Math.nrand = function(center, width) {
+	var x1, x2, rad, y1;
+	do {
+		x1 = 2 * this.random() - 1;
+		x2 = 2 * this.random() - 1;
+		rad = x1 * x1 + x2 * x2;
+	} while(rad >= 1 || rad == 0);
+	var c = this.sqrt(-2 * Math.log(rad) / rad);
+	return ((x1 * c) * (width/2)) + center;
+};
+
+/*
+Possible Genes (Dominant_Recessive):
+	NightOwl_EarlyRiser
+	Follower_Trailblazer
+	CurtPoster_VerbosePoster
+	PreferTweet_PreferRetweet
+	Comment_NoComment
+*/
+
 var chromosomes = {};
 
 function fsm() {
@@ -20,6 +46,7 @@ function fsm() {
 		}
 	};
 }
+
 function bee() {
 	var energy = 20;
 	var mateEnergy = 0.0;
@@ -76,44 +103,6 @@ function bee() {
 
 }
 
-
-function ant() {
-	this.position = {x:0, y:0};
-	this.lead = {x:100, y:200};
-	this.velocity = [-1, -1];
-	this.brain = new fsm();
-
-	this.findLeaf = function(state) {
-		console.log("findLeaf");
-		// Move the ant towards the leaf.
-		var velocityx = this.leaf.x - this.position.x;
-		var velocityy = this.leaf.y - this.position.y;
-
-		if (distance(Game.instance.leaf, this) <= 10) {
-			// The ant is extremelly close to the leaf, it's time
-			// to go home.
-			this.brain.setState(goHome);
-		}
-
-		if (distance(Game.mouse, this) <= MOUSE_THREAT_RADIUS) {
-			// Mouse cursor is threatening us. Let's run away!
-			// It will make the brain start calling runAway() from
-			// now on.
-			this.brain.setState(runAway);
-		}
-	};
-	this.goHome = function(state) {
-	};
-	this.runAway = function(state) {
-	};
-	this.update = function(state) {
-		this.brain.update();
-		this.moveBasedOnVelocity();
-	};
-
-	// Initialize
-	this.brain.setState(this.findLeaf);
-}
 function chromosome(type) {
 	this.type = type;
 	this.genes = {};
@@ -130,21 +119,6 @@ function chromosome(type) {
 	}
 }
 
-function getLinuxTime() {
-	return Math.round((new Date()).getTime() / 1000);
-}
-Math.nrand = function(center, width) {
-	var x1, x2, rad, y1;
-	do {
-		x1 = 2 * this.random() - 1;
-		x2 = 2 * this.random() - 1;
-		rad = x1 * x1 + x2 * x2;
-	} while(rad >= 1 || rad == 0);
-	var c = this.sqrt(-2 * Math.log(rad) / rad);
-	return ((x1 * c) * (width/2)) + center;
-};
-var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
-var creaturesRef = myDataRef.child("creatures2");
 if(false) {
 	creaturesRef.set({
 		c1: {
@@ -272,6 +246,7 @@ creaturesRef.on('child_added', function(snapshot) {
 		$("#txtMessage").text($('#noids').children('.boid-row').length + " boids");
 	}
 });
+
 function displayChatMessage(name, text) {
 	$('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#noids'));
 	$('#noids')[0].scrollTop = $('#noids')[0].scrollHeight;
