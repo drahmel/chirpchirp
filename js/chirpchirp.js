@@ -7,7 +7,8 @@ if (typeof window === 'undefined') {
 }
 
 var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
-var creaturesRef = myDataRef.child("creatures2");
+var user = 'dan_';
+var creaturesRef = myDataRef.child(user + "creatures2");
 
 function getLinuxTime() {
 	return Math.round((new Date()).getTime() / 1000);
@@ -215,26 +216,37 @@ function idleBoids() {
 	}
 	document.bee.update();
 }
+var boidieNum = 0;
 
 creaturesRef.on('child_added', function(snapshot) {
+	var imageStr;
 	var boid = snapshot.val();
+	if(boid.gender == 'm') {
+		imageStr = '<img src="images/sunbird.png" style="width:128px;" />';
+		//out += "<div class='boid-col gender gender-male'>M</div>";
+	} else {
+		imageStr = '<img src="images/pidgin.png" style="width:128px;" />';
+		//out += "<div class='boid-col gender gender-female'>F</div>";
+	}
 	if(getLinuxTime() > boid.deathAge) {
-		return;
+		imageStr = '<img src="images/songbird.png" style="width:128px;" />';
+		//return;
 	}
 	document.boids[snapshot.name()] = snapshot.val();
+	var boidiesPerRow = 6;
+	var row = parseInt(boidieNum / boidiesPerRow);
+	var col = boidieNum % boidiesPerRow;
+	console.log(row + " / " + col);
+	boidieNum++;
 
 	//displayChatMessage(message.name, message.birthTime);
-	var out = '<div class="boid-row" id="'+snapshot.name()+'">';
+	var out = '<div class="boid-row" id="'+snapshot.name()+'" style="top:'+(row*128)+'px;left:'+(col*128)+'px;">';
 	out += '<div class="boid-col boid-name">'+boid.name+'</div>';
-	if(boid.gender == 'm') {
-		out += "<div class='boid-col gender gender-male'>M</div>";
-	} else {
-		out += "<div class='boid-col gender gender-female'>F</div>";
-	}
-	out += "<div class='boid-col'>"+parseInt((boid.deathAge-boid.birthTime) / 60)+" minutes</div>";
-	out += "<div class='boid-col'>"+boid.temperature+" &deg;</div>";
-	out += "<div class='boid-col'>"+boid.father+" </div>";
-	out += "<div class='boid-col'>"+boid.mother+"</div>";
+	out += imageStr;
+	//out += "<div class='boid-col'>"+parseInt((boid.deathAge-boid.birthTime) / 60)+" minutes</div>";
+	//out += "<div class='boid-col'>"+boid.temperature+" &deg;</div>";
+	//out += "<div class='boid-col'>"+boid.father+" </div>";
+	//out += "<div class='boid-col'>"+boid.mother+"</div>";
 	var live = 'alive';
 	if(getLinuxTime() > boid.deathAge) {
 		live = 'dead';

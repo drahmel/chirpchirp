@@ -129,7 +129,7 @@ class FaceDetector
 
     public function toJpeg($fname = '')
     {
-       $margin = intval($this->face['w'] * .15);
+       $margin = intval($this->face['w'] * .05);
    	if(false) {
     		$color = imagecolorallocate($this->canvas, 255, 0, 0); //red
 	       imagerectangle(

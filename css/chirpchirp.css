@@ -13,16 +13,21 @@
 	line-height:48px;
 }
 .boid-row {
-	width: 100%;
+	width: 128px;
+	height: 128px;
+	overflow:hidden;
+	position:absolute;
 }
 .boid-col {
 	padding: 0px 6px;
 	float: left;
 }
 .boid-name {
+	position: absolute;
 	float: left;
 	width: 150px;
 	overflow: hidden;
+	text-align: center;
 }
 .gender {
 	float:left;
