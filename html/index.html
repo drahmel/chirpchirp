@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Boidie Clouds</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" media="all" />
+
+
+<style type="text/css">
+body {
+	background: aliceblue;
+}
+.contain {
+	width: 100%;
+	height: 100%;
+	position:relative;
+}
+.cloud {
+	position: absolute;
+	border:1px solid red;
+	background: white;
+	left: 0px;
+	top: 0px;
+	width: 200px;
+	height: 100px;
+}
+</style>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+
+	$(document).ready(function() {
+		$("#cloud1").animate({
+			opacity: 0.25,
+			left: "+50px",
+			height: "toggle"
+			}, 5000, function() {
+			// Animation complete.
+		});
+	});
+	</script>
+</head>
+<body>
+	<div class="contain">
+	Hello World
+	<div id="cloud1" class="cloud"></div>
+	<div id="cloud2" class="cloud" style="left:400px;top:200px;"></div>
+	</div>
+</body>
+</html>
