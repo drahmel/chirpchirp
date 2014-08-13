@@ -221,16 +221,23 @@ var boidieNum = 0;
 creaturesRef.on('child_added', function(snapshot) {
 	var imageStr;
 	var boid = snapshot.val();
-	if(boid.gender == 'm') {
-		imageStr = '<img src="images/sunbird.png" style="width:128px;" />';
-		//out += "<div class='boid-col gender gender-male'>M</div>";
-	} else {
-		imageStr = '<img src="images/pidgin.png" style="width:128px;" />';
-		//out += "<div class='boid-col gender gender-female'>F</div>";
-	}
-	if(getLinuxTime() > boid.deathAge) {
+	var age = getLinuxTime() - boid.deathAge;
+	if(age > 0) {
 		imageStr = '<img src="images/songbird.png" class="dead" style="width:128px;" />';
+		var boidieSize = 128;
 		//return;
+	} else {
+		var totalAge = boid.deathAge-boid.birthTime;
+		var curAge = getLinuxTime() - boid.birthTime;
+		var agePercent = curAge / totalAge;
+		var boidieSize = 64 + (64 * agePercent);
+		if(boid.gender == 'm') {
+			imageStr = '<img src="images/sunbird.png" style="position:absolute;bottom:0px;width:'+boidieSize+'px;" />';
+			//out += "<div class='boid-col gender gender-male'>M</div>";
+		} else {
+			imageStr = '<img src="images/pidgin.png"  style="position:absolute;bottom:0px;width:'+boidieSize+'px;" />';
+			//out += "<div class='boid-col gender gender-female'>F</div>";
+		}
 	}
 	document.boids[snapshot.name()] = snapshot.val();
 	var boidiesPerRow = 12;
@@ -251,7 +258,7 @@ creaturesRef.on('child_added', function(snapshot) {
 	if(getLinuxTime() > boid.deathAge) {
 		live = 'dead';
 	}
-	out += "<div class='boid-col "+live+"'>"+"</div>";
+	//out += "<div class='boid-col "+live+"'>"+"</div>";
 	out += '</div><div style="clear:both;"></div>';
 	if(!nodejs) {
 		$(out).appendTo($('#noids'));
