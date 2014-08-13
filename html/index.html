@@ -11,9 +11,10 @@ body {
 	background: aliceblue;
 }
 .contain {
-	width: 100%;
-	height: 100%;
+	width: 640px;
+	height: 480px;
 	position:relative;
+	overflow: hidden;
 }
 .cloud {
 	position: absolute;
@@ -28,16 +29,19 @@ body {
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="impress.js"></script>
 	<script type="text/javascript">
 
 	$(document).ready(function() {
 		$("#cloud1").animate({
 			opacity: 0.25,
-			left: "+50px",
-			height: "toggle"
+			left: "-50px",
 			}, 5000, function() {
 			// Animation complete.
+			$("#cloud1").animate({
+			opacity: 1.0,
+			left: "+50px",
+			}, 5000);
+
 		});
 	});
 	</script>
@@ -55,5 +59,7 @@ body {
 		<div class="step" data-x="500" data-y="-400"> This is slide 3 </div>
 
 	</div>
+	<script src="impress.js"></script>
+	<script>impress().init();</script>
 </body>
 </html>
