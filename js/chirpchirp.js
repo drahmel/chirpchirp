@@ -229,11 +229,11 @@ creaturesRef.on('child_added', function(snapshot) {
 		//out += "<div class='boid-col gender gender-female'>F</div>";
 	}
 	if(getLinuxTime() > boid.deathAge) {
-		imageStr = '<img src="images/songbird.png" style="width:128px;" />';
+		imageStr = '<img src="images/songbird.png" class="dead" style="width:128px;" />';
 		//return;
 	}
 	document.boids[snapshot.name()] = snapshot.val();
-	var boidiesPerRow = 6;
+	var boidiesPerRow = 12;
 	var row = parseInt(boidieNum / boidiesPerRow);
 	var col = boidieNum % boidiesPerRow;
 	console.log(row + " / " + col);
