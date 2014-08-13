@@ -25,7 +25,7 @@ class FaceDetector
 {
 
     protected $detection_data;
-    protected $canvas;
+    var $canvas;
     protected $face;
     private $reduced_canvas;
 
@@ -49,8 +49,23 @@ class FaceDetector
             $this->canvas = imagecreatefromjpeg($file);
 
         } elseif (substr($file, 0, 4)=='http') {
-           $this->canvas = imagecreatefromjpeg($file);
-      } else {
+        	$imgStr = file_get_contents($file);
+        	if(strlen($imgStr) < 200) {
+			echo "Image too small\n";
+			return 0;
+        	}
+
+		$this->canvas = imagecreatefromstring($imgStr); //imagecreatefromjpeg($file);
+		if(!$this->canvas) {
+			echo "Invalid image\n";
+			return 0;
+		}
+		$cache = false;
+		if($cache) {
+			imagejpeg($this->canvas, '/Users/Dan.Rahmel/Sites/chirpchirp/etc/facecache/'. crc32($file) .'.jpg');
+			return 0;
+		}
+        } else {
 
             throw new Exception("Can not load $file");
         }
@@ -108,7 +123,7 @@ class FaceDetector
                 $stats['height']
             );
         }
-        return ($this->face['w'] > 0);
+        return $this->face['w'];
     }
 
 
