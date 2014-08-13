@@ -11,14 +11,26 @@ $face_detect = new FaceDetector(ROOT . "vendor/facedetector/detection.dat");
 $files = scandir($srcPath);
 foreach($files as $key => $curFile) {
 	$parts = pathinfo($curFile);
-	$ext = !empty($parts['extension']) ?	strtolower($parts['extension']	:	'';
-	print_r($parts);
-	if($key > 10) {
-		break;
+	$ext = !empty($parts['extension']) ?	strtolower($parts['extension'])	:	'';
+
+	$destFile = $destPath . 'face_' . $parts['filename'] . '.jpg';
+	$destNone = $destPath . 'face_' . $parts['filename'] . '.none';
+
+	if(is_file($destFile) || is_file($destNone)) {
+		continue;
 	}
+	if($ext != 'jpg') {
+		continue;
+	}
+	//print_r($parts['filename']);
+	//if($key > 10) { break; }
 	echo $curFile . NL;
+	$result = $face_detect->faceDetect($srcPath . $curFile);
+	if($result) {
+		$face_detect->toJpeg($destFile);
+	} else {
+		file_put_contents($destNone, '');
+	}
 }
-//$face_detect->faceDetect('sample-image1.jpg');
-//$face_detect->toJpeg('face1.jpg');
 
 ?>
