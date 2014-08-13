@@ -1,4 +1,4 @@
-function identityBank(bar) {
+function boidie(bar) {
 	this.bar = bar;
 	this.blank = {
 		firstName: '',
@@ -9,8 +9,3 @@ function identityBank(bar) {
 	};
 }
 
-identityBank.prototype.name = function() {
-
-};
-
-module.exports = identityBank;
