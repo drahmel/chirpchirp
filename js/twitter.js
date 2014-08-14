@@ -1,46 +1,62 @@
 
-var keys = require('./keys.js');
+var keysAPI = require('./keys.js');
+var keys = new keysAPI('MichaelDHyson');
 
 var twitterAPI = require('node-twitter-api');
 var twitter = new twitterAPI({
     consumerKey: keys.twitterKey,
     consumerSecret: keys.twitterSecret,
-    callback: 'http://yoururl.tld/something'
+    callback: 'http://local.twitter.com/'
 });
 
-/*
 // Doesn't work
-twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
-    if (error) {
-        console.log("Error getting OAuth request token : ");
-        console.log(error);
-    } else {
-        //store token and tokenSecret somewhere, you'll need them later; redirect user
-        console.log(error);
-        console.log(requestToken);
-        console.log(requestTokenSecret);
-        console.log(results);
-    }
-});
-*/
-/*
-twitter.statuses("update", {
-        status: "I really like The Rack (http://www.rackworkout.com/) #therack"
-    },
-    accessToken,
-    accessTokenSecret,
-    function(error, data, response) {
-        if (error) {
-        	console.log(error);
-            // something went wrong
-        } else {
-            // data contains the data sent by twitter
-            console.log("Success!");
-            console.log(data);
-        }
-    }
-);
-*/
+function doGetToken() {
+	twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
+	    if (error) {
+		console.log("Error getting OAuth request token : ");
+		console.log(error);
+	    } else {
+		//store token and tokenSecret somewhere, you'll need them later; redirect user
+		console.log(error);
+		console.log(requestToken);
+		console.log(requestTokenSecret);
+		console.log(results);
+		doSearch("fitness since:2014-08-08", handleSearchResults);
+		twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, function(error, accessToken, accessTokenSecret, results) {
+		    if (error) {
+			console.log(error);
+		    } else {
+			keys.accessToken = requestToken;
+			keys.accessTokenSecret = requestTokenSecret;
+			//store accessToken and accessTokenSecret somewhere (associated to the user)
+			//Step 4: Verify Credentials belongs here
+			console.log(results);
+			doSearch("fitness since:2014-08-08", handleSearchResults);
+		    }
+		});
+	    }
+	});
+}
+
+function doPost(msg) {
+	twitter.statuses("update", {
+		status: msg
+	    },
+	    keys.accessToken,
+	    keys.accessTokenSecret,
+	    function(error, data, response) {
+		if (error) {
+			console.log(error);
+		    // something went wrong
+		} else {
+		    // data contains the data sent by twitter
+		    console.log("Success!");
+		    console.log(data);
+		}
+	    }
+	);
+}
+
 // https://twitter.com/TechCrunch/status/499919536263401473
 function doRetweet(id, callback) {
 	console.log("^^^^^^^^^ Retweeting: "+id);
@@ -74,7 +90,7 @@ function doSearch(term, callback) {
 	    keys.accessTokenSecret,
 	    function(error, data, response) {
 		if (error) {
-			//console.log(error);
+			console.log(error);
 			out['msg'] = error;
 		    // something went wrong
 		} else {
@@ -99,8 +115,8 @@ function b_crc32 (str) {
     return (crc ^ (-1)) >>> 0;
 };
 
-//doSearch("fitness since:2014-08-08");
-doSearch("fitness", function(result) {
+
+function handleSearchResults(result) {
 	if(result['success']) {
 		var dups = {}
 		var alreadyRetweeted = false;
@@ -120,19 +136,22 @@ doSearch("fitness", function(result) {
 			console.log(status['id'] + ":" + status['text']);
 			if(status['text'].substr(0, 2) == 'RT') {
 				//console.log(status['retweeted_status']);
-				originalID = status['retweeted_status']['id'];
-				console.log("RETWEET of: "+ originalID);
+				if('retweeted_status' in status) {
+					originalID = status['retweeted_status']['id'];
+					console.log("RETWEET of: "+ originalID);
+				}
 			}
 			if(status['retweet_count'] > 0) {
 				console.log('Retweeted '+status['retweet_count']+' times!!!');
-				if(!alreadyRetweeted && status['retweet_count'] > 10) {
+				if(!alreadyRetweeted && status['retweet_count'] > 2) {
 					alreadyRetweeted = true;
-					var id = status['id'];
+					var id = 499927703404154900; //status['id'];
 					if(originalID) {
-						id = originalID;
+						//id = originalID;
 					}
 					console.log("_________________Retweeting: "+id);
 					//doRetweet(id);
+
 				}
 			}
 			if(status['favorite_count'] > 0) {
@@ -140,6 +159,8 @@ doSearch("fitness", function(result) {
 			}
 		}
 	}
-});
+};
 
-
+//doSearch("fitness since:2014-08-08");
+//doSearch("fitness", handleSearchResults);
+doPost("Life is great!");
