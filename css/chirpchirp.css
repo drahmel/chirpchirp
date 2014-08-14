@@ -105,4 +105,15 @@
 		-moz-transform-style: preserve-3d;
 		-o-transform-style: preserve-3d;
 	}
+.cloudBase {
+		background-color: rgba( 255, 0, 255, .5 );
+		position: absolute;
+		left: 256px;
+		top: 256px;
+		width: 20px;
+		height: 20px;
+		margin-left: -10px;
+		margin-top: -10px;
+	}
+
 
