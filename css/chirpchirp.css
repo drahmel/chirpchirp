@@ -1,4 +1,4 @@
-body {
+.abody {
 	background: #feffff;
 	background: -moz-linear-gradient(top,  #feffff 0%, #ddf1f9 35%, #a0d8ef 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#feffff), color-stop(35%,#ddf1f9), color-stop(100%,#a0d8ef));
@@ -66,4 +66,43 @@ body {
 	-ms-transform:rotate(-70deg); /* IE 9 */
 	-webkit-transform:rotate(-70deg); /* Opera, Chrome, and Safari */
 }
+
+	#viewport {
+		-webkit-perspective: 400;
+		-moz-perspective: 400;
+		-o-perspective: 400;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		overflow: hidden;
+		background-image: linear-gradient(bottom, rgb(69,132,180) 28%, rgb(31,71,120) 64%);
+		background-image: -o-linear-gradient(bottom, rgb(69,132,180) 28%, rgb(31,71,120) 64%);
+		background-image: -moz-linear-gradient(bottom, rgb(69,132,180) 28%, rgb(31,71,120) 64%);
+		background-image: -webkit-linear-gradient(bottom, rgb(69,132,180) 28%, rgb(31,71,120) 64%);
+		background-image: -ms-linear-gradient(bottom, rgb(69,132,180) 28%, rgb(31,71,120) 64%);
+
+		background-image: -webkit-gradient(
+			linear,
+			left bottom,
+			left top,
+			color-stop(0.28, rgb(69,132,180)),
+			color-stop(0.64, rgb(31,71,120))
+		);
+	}
+
+	#world {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		margin-left: -256px;
+		margin-top: -256px;
+		height: 512px;
+		width: 512px;
+		background-color: rgba( 255, 0, 0, .2 );
+		-webkit-transform-style: preserve-3d;
+		-moz-transform-style: preserve-3d;
+		-o-transform-style: preserve-3d;
+	}
 

@@ -11,11 +11,10 @@
 	<link rel="apple-touch-icon" href="/images/favicon.png" />
 
 	<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
-	<script type="text/javascript" src="js/chirpchirp.js"></script>
-	<script type="text/javascript" src="js/boidie.js"></script>
 </head>
 <body>
-	<div class="container-fluid" style="min-height:800px;">
+	<div  id="viewport" class="acontainer-fluid" style="amin-height:800px;">
+		<div id="world" ></div>
 		<div class="row-fluid" style="min-height:400px;width:6000px;display:relative;">
 			<div style="width:100%"  id="noids">
 				<div id="noids" style="display:relative;"></div>
@@ -26,6 +25,8 @@
 	<input type='text' id='nameInput' placeholder='Name'>
 	<input type='text' id='messageInput' placeholder='Message'>
 	<button class="btn" id="addCreature">Add Creature</button>
+<script type="text/javascript" src="js/chirpchirp.js"></script>
+<script type="text/javascript" src="js/boidie.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	var myAnt = new ant();
