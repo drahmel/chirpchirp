@@ -163,4 +163,4 @@ function handleSearchResults(result) {
 
 //doSearch("fitness since:2014-08-08");
 //doSearch("fitness", handleSearchResults);
-doPost("Life is great!");
+doPost("Don't look too far behind you.");
