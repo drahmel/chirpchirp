@@ -42,24 +42,26 @@ twitter.statuses("update", {
 );
 */
 // https://twitter.com/TechCrunch/status/499919536263401473
-/*
-twitter.statuses("retweet", {
-        id: "499919536263401473"
-    },
-    accessToken,
-    accessTokenSecret,
-    function(error, data, response) {
-        if (error) {
-        	console.log(error);
-            // something went wrong
-        } else {
-            // data contains the data sent by twitter
-            console.log("Success!");
-            console.log(data);
-        }
-    }
-);
-*/
+function doRetweet(id, callback) {
+	console.log("^^^^^^^^^ Retweeting: "+id);
+	twitter.statuses("retweet", {
+		id: id
+	    },
+	    keys.accessToken,
+	    keys.accessTokenSecret,
+	    function(error, data, response) {
+		if (error) {
+			console.log("Retweet Error!!!");
+			console.log(error);
+		    // something went wrong
+		} else {
+		    // data contains the data sent by twitter
+		    console.log("Retweet Success!");
+		    console.log(data);
+		}
+	    }
+	);
+}
 
 //nytimes
 function doSearch(term, callback) {
@@ -101,11 +103,13 @@ function b_crc32 (str) {
 doSearch("fitness", function(result) {
 	if(result['success']) {
 		var dups = {}
+		var alreadyRetweeted = false;
 		if(false) {
 			console.log(result['data']);
 		}
 		var statuses = result['data']['statuses'];
 		for(var i in statuses) {
+			var originalID = 0;
 			var status = statuses[i];
 			var crc = b_crc32(status['text']);
 			if(crc in dups) {
@@ -114,16 +118,25 @@ doSearch("fitness", function(result) {
 				dups[crc] = 1;
 			}
 			console.log(status['id'] + ":" + status['text']);
+			if(status['text'].substr(0, 2) == 'RT') {
+				//console.log(status['retweeted_status']);
+				originalID = status['retweeted_status']['id'];
+				console.log("RETWEET of: "+ originalID);
+			}
 			if(status['retweet_count'] > 0) {
 				console.log('Retweeted '+status['retweet_count']+' times!!!');
+				if(!alreadyRetweeted && status['retweet_count'] > 10) {
+					alreadyRetweeted = true;
+					var id = status['id'];
+					if(originalID) {
+						id = originalID;
+					}
+					console.log("_________________Retweeting: "+id);
+					//doRetweet(id);
+				}
 			}
 			if(status['favorite_count'] > 0) {
 				console.log('Favorited!!!');
-			}
-			if(status['text'].substr(0, 2) == 'RT') {
-				//console.log(status['retweeted_status']);
-				var originalID = status['retweeted_status']['id'];
-				console.log("RETWEET of: "+ originalID);
 			}
 		}
 	}
