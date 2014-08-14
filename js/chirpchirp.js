@@ -313,8 +313,35 @@ function displayChatMessage(name, text) {
 		div.style.oTransform = t;
 		world.appendChild( div );
 
+		for( var j = 0; j < 5 + Math.round( Math.random() * 10 ); j++ ) {
+			var cloud = document.createElement( 'div' );
+			cloud.className = 'cloudLayer';
+
+			var x = 256 - ( Math.random() * 512 );
+			var y = 256 - ( Math.random() * 512 );
+			var z = 100 - ( Math.random() * 200 );
+			var a = Math.random() * 360;
+			var s = .25 + Math.random();
+			x *= .2; y *= .2;
+			cloud.data = {
+				x: x,
+				y: y,
+				z: z,
+				a: a,
+				s: s
+			};
+			var t = 'translateX( ' + x + 'px ) translateY( ' + y + 'px ) translateZ( ' + z + 'px ) rotateZ( ' + a + 'deg ) scale( ' + s + ' )';
+			cloud.style.webkitTransform = t;
+			cloud.style.MozTransform = t;
+			cloud.style.oTransform = t;
+
+			div.appendChild( cloud );
+			layers.push( cloud );
+		}
+
 		return div;
 	}
+
 
 	window.addEventListener( 'mousewheel', onContainerMouseWheel );
 	window.addEventListener( 'DOMMouseScroll', onContainerMouseWheel );
