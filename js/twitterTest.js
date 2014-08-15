@@ -1,5 +1,7 @@
 var twitterAPI = require('./tweet.js');
 var tweetr = new twitterAPI('DanRahmel');
+var utilsAPI = require('./utils.js');
+var utils = new utilsAPI();
 
 
 //doSearch("fitness since:2014-08-08");
@@ -14,7 +16,7 @@ tweetr.doSearch("Snapchat", function(result) {
 		for(var i in statuses) {
 			var originalID = 0;
 			var status = statuses[i];
-			var crc = tweetr.b_crc32(status['text']);
+			var crc = utils.crc32(status['text']);
 			if(crc in dups) {
 				console.log("Dup");
 			} else {
