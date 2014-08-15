@@ -1,6 +1,19 @@
+// Check if running as Node
+var nodejs = false;
+if (typeof window === 'undefined') {
+	nodejs = true;
+	var Firebase = require('firebase');
+	var document = {};
+}
+
+var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
+var user = 'dan_';
+var retweetsRef = myDataRef.child(user + "retweets");
+
 
 var keysAPI = require('./keys.js');
-var keys = new keysAPI('MichaelDHyson');
+var boidieName = 'DanRahmel';
+var keys = new keysAPI(boidieName);
 
 var twitterAPI = require('node-twitter-api');
 var twitter = new twitterAPI({
@@ -59,7 +72,6 @@ function doPost(msg) {
 
 // https://twitter.com/TechCrunch/status/499919536263401473
 function doRetweet(id, callback) {
-	console.log("^^^^^^^^^ Retweeting: "+id);
 	twitter.statuses("retweet", {
 		id: id
 	    },
@@ -67,12 +79,12 @@ function doRetweet(id, callback) {
 	    keys.accessTokenSecret,
 	    function(error, data, response) {
 		if (error) {
-			console.log("Retweet Error!!!");
+			console.log("Retweet Error!!!"+id);
 			console.log(error);
 		    // something went wrong
 		} else {
 		    // data contains the data sent by twitter
-		    console.log("Retweet Success!");
+		    console.log("Retweet Success!"+id);
 		    console.log(data);
 		}
 	    }
@@ -137,30 +149,36 @@ function handleSearchResults(result) {
 			if(status['text'].substr(0, 2) == 'RT') {
 				//console.log(status['retweeted_status']);
 				if('retweeted_status' in status) {
-					originalID = status['retweeted_status']['id'];
-					console.log("RETWEET of: "+ originalID);
-				}
-			}
-			if(status['retweet_count'] > 0) {
-				console.log('Retweeted '+status['retweet_count']+' times!!!');
-				if(!alreadyRetweeted && status['retweet_count'] > 2) {
-					alreadyRetweeted = true;
-					var id = 499927703404154900; //status['id'];
-					if(originalID) {
-						//id = originalID;
-					}
-					console.log("_________________Retweeting: "+id);
-					//doRetweet(id);
-
+					originalID = status['retweeted_status']['id_str'];
+					console.log("...RETWEET of: "+ originalID);
 				}
 			}
 			if(status['favorite_count'] > 0) {
-				console.log('Favorited!!!');
+				console.log('...Favorited!!!');
+			}
+			if(status['retweet_count'] > 0) {
+				console.log('Retweeted '+status['retweet_count']+' times!!!');
+				if(!alreadyRetweeted && status['retweet_count'] > 20) {
+					alreadyRetweeted = true;
+					var id = status['id_str'];
+					if(originalID) {
+						id = originalID;
+					}
+					console.log("_________________Retweeting: "+id);
+					retweetsRef.child(id).set({ name: boidieName });
+
+					doRetweet(id);
+
+				}
 			}
 		}
+		console.log("Done. _________________");
 	}
 };
 
 //doSearch("fitness since:2014-08-08");
-//doSearch("fitness", handleSearchResults);
-doPost("Don't look too far behind you.");
+doSearch("iPad", handleSearchResults);
+//doPost("The scale doesn't lie.");
+//doRetweet('499919536263401473');
+//process.exit();
+
