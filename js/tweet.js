@@ -14,6 +14,7 @@ function tweet(boidieName) {
 	this.boidieName = boidieName;
 	var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
 	this.retweetsRef = myDataRef.child("retweets");
+	this.actionRef = myDataRef.child("actions");
 
 	this.keys = new keysAPI(boidieName);
 
@@ -88,9 +89,11 @@ tweet.prototype.doRetweet = function(id, callback) {
 		    console.log("Retweet Success!"+id);
 		    console.log(data);
 		}
+		process.exit();
 	    }
 	);
 }
+// cd /Users/Dan.Rahmel/Sites/chirpchirp;node js/twitterTest.js
 
 //nytimes
 tweet.prototype.doSearch = function(term, callback) {
@@ -203,6 +206,8 @@ tweet.prototype.retweetPopular = function(result) {
 					}
 					console.log("_________________Retweeting: "+id);
 					this.retweetsRef.child(id).set({ name: true });
+					this.actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: status['text'], url: "halmrippetoe" });
+
 
 					this.doRetweet(id);
 

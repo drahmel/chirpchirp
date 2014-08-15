@@ -17,7 +17,7 @@ if (typeof window === 'undefined') {
 var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
 var user = 'dan_';
 var creaturesRef = myDataRef.child(user + "creatures2");
-var actionRef = myDataRef.child(user + "actions");
+var actionRef = myDataRef.child("actions");
 var boidieNum = 0;
 var deadBoidies = 0;
 
@@ -40,7 +40,7 @@ function showAlert(bid, msg)
 	//bid = '-JUOw-EXpPi2lTV6Vva-';
 	$('#'+bid)
 		.find('.boidie-msg')
-		.html(msg.substr(0,80))
+		.html(msg)
 		.css('display', 'block');
 	t = window.setTimeout("$('#"+bid+"').find('.boidie-msg').fadeOut('slow')", 2000);
 }
@@ -139,8 +139,8 @@ creaturesRef.on('child_added', function(snapshot) {
 
 	//displayChatMessage(message.name, message.birthTime);
 	var out = '<div class="boid-row" id="'+snapshot.name()+'" style="top:'+ty+'px;left:'+tx+'px;">';
-	out += '<div class="boid-col boid-name">'+boid.name+'</div>';
-	out += '<div class="boidie-msg" style="display:none;">Hello h jh bjh bjhb jhbjh b jh bjh bj hb bjhb hj</div>';
+	out += '<div class="boid-col boid-name"><a href="https://twitter.com/MichaelDHyson" target="_boidie">'+boid.name+'</a></div>';
+	out += '<div class="boidie-msg" style="display:none;"></div>';
 	out += imageStr;
 	//out += "<div class='boid-col'>"+parseInt((boid.deathAge-boid.birthTime) / 60)+" minutes</div>";
 	//out += "<div class='boid-col'>"+boid.temperature+" &deg;</div>";
@@ -159,7 +159,8 @@ creaturesRef.on('child_added', function(snapshot) {
 });
 actionRef.on('child_added', function(snapshot) {
 	var action = snapshot.val();
-	showAlert(action.bid, action.msg);
+	var msg = "<a href='https://twitter.com/"+action.url+"' target='_boidie'>" + action.msg.substr(0,80) + "</a>";
+	showAlert(action.bid, msg);
 	console.log(action);
 });
 

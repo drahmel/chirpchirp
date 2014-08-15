@@ -37,10 +37,10 @@ boidie.prototype.eating = function() {
 	this.energy++;
 	//console.log("Sleep energy: "+energy);
 	if(this.energy > 20) {
-		report(this.name + ": Start working");
+		report(this.name + ": Start tweeting");
 
 		if(nodejs) {
-			actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: "RT: This is great!" });
+			actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: "RT: This is great!", url: "halmrippetoe" });
 		}
 		this.setState(this.working);
 	}
@@ -68,7 +68,7 @@ boidie.prototype.mating = function() {
 		report(this.name + ": Start eating");
 		this.setState(this.eating);
 	} else if(this.mateCount == 1) {
-		report(this.name + ": Creating boid");
+		report(this.name + ": Available for mating");
 		var male = false;
 		var female = false;
 		this.create(male, female);

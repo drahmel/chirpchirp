@@ -1,11 +1,11 @@
 var twitterAPI = require('./tweet.js');
-var tweetr = new twitterAPI('DanRahmel');
+var tweetr = new twitterAPI('MichaelDHyson');
 var utilsAPI = require('./utils.js');
 var utils = new utilsAPI();
 
 
 //doSearch("fitness since:2014-08-08");
-tweetr.doSearch("Snapchat", function(result) {
+tweetr.doSearch("fitness", function(result) {
 	tweetr.retweetPopular(result);
 });
 //doPost("The scale doesn't lie.");
