@@ -6,7 +6,7 @@ var utils = new utilsAPI();
 
 //doSearch("fitness since:2014-08-08");
 tweetr.doSearch("Snapchat", function(result) {
-	tweeter.retweetPopular(result);
+	tweetr.retweetPopular(result);
 });
 //doPost("The scale doesn't lie.");
 //doRetweet('499919536263401473');
