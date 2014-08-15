@@ -40,9 +40,14 @@ function showAlert(bid, msg)
 	//bid = '-JUOw-EXpPi2lTV6Vva-';
 	$('#'+bid)
 		.find('.boidie-msg')
-		.text(msg.substr(0,80))
+		.html(msg.substr(0,80))
 		.css('display', 'block');
 	t = window.setTimeout("$('#"+bid+"').find('.boidie-msg').fadeOut('slow')", 2000);
+}
+function report(msg) {
+	if(!nodejs) {
+		$("#txtMain").html(msg);
+	}
 }
 
 
@@ -71,7 +76,7 @@ function idleBoidies() {
 	var female = false;
 	if(Object.keys(document.boids).length < 2) {
 		//console.log("Create init");
-		for(var i=0;i<10;i++) {
+		for(var i=0;i<7;i++) {
 			boidies.create(creaturesRef, male, female);
 		}
 	}
@@ -124,7 +129,7 @@ creaturesRef.on('child_added', function(snapshot) {
 	boidieInstance.obj = snapshot.val();
 	document.boids[snapshot.name()] = boidieInstance;
 	var boidiesPerRow = 12;
-	var marginTop = 0;
+	var marginTop = 100;
 	var row = parseInt(boidieNum / boidiesPerRow);
 	var col = boidieNum % boidiesPerRow;
 	//console.log(row + " / " + col);
@@ -154,6 +159,7 @@ creaturesRef.on('child_added', function(snapshot) {
 });
 actionRef.on('child_added', function(snapshot) {
 	var action = snapshot.val();
+	showAlert(action.bid, action.msg);
 	console.log(action);
 });
 
@@ -165,6 +171,6 @@ function displayChatMessage(name, text) {
 //$(document).ready(function() {
 	document.boids = {};
 
-	setInterval(idleBoidies, 10000);
+	setInterval(idleBoidies, 1000);
 //});
 

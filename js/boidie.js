@@ -37,9 +37,11 @@ boidie.prototype.eating = function() {
 	this.energy++;
 	//console.log("Sleep energy: "+energy);
 	if(this.energy > 20) {
-		console.log("Start working");
+		report(this.name + ": Start working");
 
-		//actionRef.push({ type: "tweet", msg: "Hello World" });
+		if(nodejs) {
+			actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: "RT: This is great!" });
+		}
 		this.setState(this.working);
 	}
 }
@@ -48,11 +50,11 @@ boidie.prototype.working = function() {
 	this.mateEnergy += 0.3;
 	console.log("Work energy: "+this.energy+" Mate energy:"+this.mateEnergy);
 	if(this.mateEnergy > 10) {
-		console.log("Start mating");
+		report(this.name + ": Start mating");
 		this.mateCount = 3;
 		this.setState(this.mating);
 	} else if(this.energy < 10) {
-		console.log("Start eating");
+		report(this.name + ": Start eating");
 		this.setState(this.eating);
 	}
 }
@@ -63,10 +65,10 @@ boidie.prototype.mating = function() {
 	this.mateCount--;
 	if(this.mateCount < 1) {
 		this.mateEnergy = 0.0;
-		console.log("Start eating");
+		report(this.name + ": Start eating");
 		this.setState(this.eating);
 	} else if(this.mateCount == 1) {
-		console.log("Creating boid");
+		report(this.name + ": Creating boid");
 		var male = false;
 		var female = false;
 		this.create(male, female);
@@ -109,7 +111,7 @@ boidie.prototype.create = function(db, mother, father) {
 			}
 		}
 	);
-	console.log("Added "+name);
+	report("Added "+name);
 }
 
 function rotate($el, degrees) {
