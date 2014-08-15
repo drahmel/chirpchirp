@@ -15,9 +15,9 @@ if (typeof window === 'undefined') {
 }
 
 var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
-boidies.document = document;
 var user = 'dan_';
 var creaturesRef = myDataRef.child(user + "creatures2");
+var actionRef = myDataRef.child(user + "actions");
 var boidieNum = 0;
 var deadBoidies = 0;
 
@@ -38,59 +38,6 @@ Math.nrand = function(center, width) {
 
 var chromosomes = {};
 
-function bee() {
-	var energy = 20;
-	var mateEnergy = 0.0;
-	var mateCount = 3;
-	var brain;
-
-	this.init = function() {
-		brain = new fsmAPI();
-		brain.setState(working);
-	}
-	var eating = function() {
-		energy++;
-		//console.log("Sleep energy: "+energy);
-		if(energy > 20) {
-			console.log("Start working");
-			brain.setState(working);
-		}
-	}
-	var working = function() {
-		energy--;
-		mateEnergy += 0.3;
-		//console.log("Work energy: "+energy+" Mate energy:"+mateEnergy);
-		if(mateEnergy > 10) {
-			console.log("Start mating");
-			mateCount = 3;
-			brain.setState(mating);
-		} else if(energy < 10) {
-			console.log("Start eating");
-			brain.setState(eating);
-		}
-	}
-
-	this.sleeping = function() {
-
-	}
-	mating = function() {
-		mateCount--;
-		if(mateCount < 1) {
-			mateEnergy = 0.0;
-			console.log("Start eating");
-			brain.setState(eating);
-		} else if(mateCount == 1) {
-			console.log("Creating boid");
-			var male = false;
-			var female = false;
-			createBoid(male, female);
-		}
-
-	}
-	this.update = function() {
-		brain.update();
-	}
-}
 
 function chromosome(type) {
 	this.type = type;
@@ -119,6 +66,8 @@ function idleBoidies() {
 		}
 	}
 	for(var i in document.boids) {
+		document.boids[i].update();
+		/*
 		if(document.boids[i].gender == 'm') {
 			male = i;
 		} else {
@@ -126,11 +75,13 @@ function idleBoidies() {
 		}
 		if(document.breed && male && female && (100*Math.random() < 5)) {
 			boidies.create(creaturesRef, male, female);
+
 			male = false;
 			female = false;
 		}
+		*/
 	}
-	document.bee.update();
+	//document.bee.update();
 }
 
 creaturesRef.on('child_added', function(snapshot) {
@@ -138,6 +89,7 @@ creaturesRef.on('child_added', function(snapshot) {
 	var boid = snapshot.val();
 	var age = getLinuxTime() - boid.deathAge;
 	if(age > 0) {
+		return;
 		if(deadBoidies > 20) {
 			return;
 		}
@@ -158,7 +110,10 @@ creaturesRef.on('child_added', function(snapshot) {
 			//out += "<div class='boid-col gender gender-female'>F</div>";
 		}
 	}
-	document.boids[snapshot.name()] = snapshot.val();
+	var boidieInstance = new boidie(snapshot.name());
+
+	boidieInstance.obj = snapshot.val();
+	document.boids[snapshot.name()] = boidieInstance;
 	var boidiesPerRow = 12;
 	var marginTop = 0;
 	var row = parseInt(boidieNum / boidiesPerRow);
@@ -187,6 +142,10 @@ creaturesRef.on('child_added', function(snapshot) {
 		$("#txtMessage").text($('#noids').children('.boid-row').length + " boids");
 	}
 });
+actionRef.on('child_added', function(snapshot) {
+	var action = snapshot.val();
+	console.log(action);
+});
 
 function displayChatMessage(name, text) {
 	$('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#noids'));
@@ -195,9 +154,7 @@ function displayChatMessage(name, text) {
 
 //$(document).ready(function() {
 	document.boids = {};
-	document.bee = new bee();
-	document.bee.init();
 
-	setInterval(idleBoidies, 1000);
+	setInterval(idleBoidies, 10000);
 //});
 
