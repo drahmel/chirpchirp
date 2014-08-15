@@ -22,5 +22,9 @@ utils.prototype.crc32 = function(str) {
     return (crc ^ (-1)) >>> 0;
 };
 
+utils.prototype.getLinuxTime = function() {
+	return Math.round((new Date()).getTime() / 1000);
+}
+
 module.exports = utils;
 
