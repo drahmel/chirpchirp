@@ -3,13 +3,14 @@ var nodejs = false;
 if (typeof window === 'undefined') {
 	nodejs = true;
 	var Firebase = require('firebase');
-	var fsmAPI = require('./fsm.js');
+	var fsmAPI = require('./finitestatemachine.js');
 	var boidieAPI = require('./boidie.js');
 	var document = {};
 	var fsm = new fsmAPI();
 	var boidies = new boidieAPI();
 } else {
-	var fsm = new fsm();
+	var fsmAPI = finitestatemachine;
+	var fsm = new finitestatemachine();
 	var boidies = new boidie();
 }
 
@@ -159,13 +160,16 @@ creaturesRef.on('child_added', function(snapshot) {
 	}
 	document.boids[snapshot.name()] = snapshot.val();
 	var boidiesPerRow = 12;
+	var marginTop = 0;
 	var row = parseInt(boidieNum / boidiesPerRow);
 	var col = boidieNum % boidiesPerRow;
-	console.log(row + " / " + col);
+	//console.log(row + " / " + col);
+	var ty = (row*128) + marginTop;
+	var tx = (col*128);
 	boidieNum++;
 
 	//displayChatMessage(message.name, message.birthTime);
-	var out = '<div class="boid-row" id="'+snapshot.name()+'" style="top:'+(row*128)+'px;left:'+(col*128)+'px;">';
+	var out = '<div class="boid-row" id="'+snapshot.name()+'" style="top:'+ty+'px;left:'+tx+'px;">';
 	out += '<div class="boid-col boid-name">'+boid.name+'</div>';
 	out += imageStr;
 	//out += "<div class='boid-col'>"+parseInt((boid.deathAge-boid.birthTime) / 60)+" minutes</div>";

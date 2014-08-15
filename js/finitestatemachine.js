@@ -1,4 +1,4 @@
-function fsm() {
+function finitestatemachine() {
 	var activeState = undefined;
 
 	this.setState = function(state) {
@@ -11,4 +11,4 @@ function fsm() {
 	};
 }
 
-module.exports = fsm;
+module.exports = finitestatemachine;
