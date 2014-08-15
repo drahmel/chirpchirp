@@ -24,7 +24,6 @@ tweetr.doSearch("Snapchat", function(result) {
 			}
 			console.log(status['id'] + ":" + status['text']);
 			if(status['text'].substr(0, 2) == 'RT') {
-				//console.log(status['retweeted_status']);
 				if('retweeted_status' in status) {
 					originalID = status['retweeted_status']['id_str'];
 					console.log("...RETWEET of: "+ originalID);
