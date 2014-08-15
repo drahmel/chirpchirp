@@ -35,6 +35,16 @@ Math.nrand = function(center, width) {
 	var c = this.sqrt(-2 * Math.log(rad) / rad);
 	return ((x1 * c) * (width/2)) + center;
 };
+function showAlert(bid, msg)
+{
+	//bid = '-JUOw-EXpPi2lTV6Vva-';
+	$('#'+bid)
+		.find('.boidie-msg')
+		.text(msg.substr(0,80))
+		.css('display', 'block');
+	t = window.setTimeout("$('#"+bid+"').find('.boidie-msg').fadeOut('slow')", 2000);
+}
+
 
 var chromosomes = {};
 
@@ -89,8 +99,7 @@ creaturesRef.on('child_added', function(snapshot) {
 	var boid = snapshot.val();
 	var age = getLinuxTime() - boid.deathAge;
 	if(age > 0) {
-		return;
-		if(deadBoidies > 20) {
+		if(deadBoidies > 10) {
 			return;
 		}
 		imageStr = '<img src="images/songbird.png" class="dead" style="width:128px;" />';
@@ -126,6 +135,7 @@ creaturesRef.on('child_added', function(snapshot) {
 	//displayChatMessage(message.name, message.birthTime);
 	var out = '<div class="boid-row" id="'+snapshot.name()+'" style="top:'+ty+'px;left:'+tx+'px;">';
 	out += '<div class="boid-col boid-name">'+boid.name+'</div>';
+	out += '<div class="boidie-msg" style="display:none;">Hello h jh bjh bjhb jhbjh b jh bjh bj hb bjhb hj</div>';
 	out += imageStr;
 	//out += "<div class='boid-col'>"+parseInt((boid.deathAge-boid.birthTime) / 60)+" minutes</div>";
 	//out += "<div class='boid-col'>"+boid.temperature+" &deg;</div>";

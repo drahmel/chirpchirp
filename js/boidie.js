@@ -13,6 +13,7 @@ function boidie(name) {
 	this.mateEnergy = 0.0;
 	this.mateCount = 3;
 	this.setState(this.working);
+	this.utils = utils;
 
 	this.blank = {
 		firstName: '',
@@ -85,7 +86,7 @@ Possible Genes (Dominant_Recessive):
 boidie.prototype.create = function(db, mother, father) {
 	var gender = 10*Math.random() > 4 ? 'm' : 'f';
 	var temperature = parseInt(Math.nrand(75, 5));
-	var age = utils.getLinuxTime();
+	var age = this.utils.getLinuxTime();
 	var deathAge = age + parseInt(3600*Math.random());
 	var name = (gender=='m') ? "Sam"+temperature : "Pam"+temperature;
 	db.push(

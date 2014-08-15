@@ -39,6 +39,14 @@ body {
 	width: 150px;
 	overflow: hidden;
 	text-align: center;
+	background: aliceblue;
+}
+.boidie-msg {
+	position: absolute;
+	left: -10;
+	top: -10;
+	background: gray;
+	color:white;
 }
 .gender {
 	float:left;
