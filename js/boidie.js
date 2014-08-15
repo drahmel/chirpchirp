@@ -39,7 +39,7 @@ boidie.prototype.eating = function() {
 		console.log("Start working");
 
 		//actionRef.push({ type: "tweet", msg: "Hello World" });
-		this.brain.setState(this.working);
+		this.setState(this.working);
 	}
 }
 boidie.prototype.working = function() {
@@ -49,10 +49,10 @@ boidie.prototype.working = function() {
 	if(this.mateEnergy > 10) {
 		console.log("Start mating");
 		this.mateCount = 3;
-		this.brain.setState(this.mating);
+		this.setState(this.mating);
 	} else if(this.energy < 10) {
 		console.log("Start eating");
-		this.brain.setState(this.eating);
+		this.setState(this.eating);
 	}
 }
 boidie.prototype.sleeping = function() {
@@ -63,7 +63,7 @@ boidie.prototype.mating = function() {
 	if(this.mateCount < 1) {
 		this.mateEnergy = 0.0;
 		console.log("Start eating");
-		this.brain.setState(this.eating);
+		this.setState(this.eating);
 	} else if(this.mateCount == 1) {
 		console.log("Creating boid");
 		var male = false;
