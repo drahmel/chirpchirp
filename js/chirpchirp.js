@@ -6,11 +6,14 @@ if (typeof window === 'undefined') {
 	var fsmAPI = require('./fsm.js');
 	var boidieAPI = require('./boidie.js');
 	var document = {};
+	var fsm = new fsmAPI();
+	var boidies = new boidieAPI();
+} else {
+	var fsm = new fsm();
+	var boidies = new boidie();
 }
 
 var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
-var fsm = new fsmAPI();
-var boidies = new boidieAPI();
 boidies.document = document;
 var user = 'dan_';
 var creaturesRef = myDataRef.child(user + "creatures2");

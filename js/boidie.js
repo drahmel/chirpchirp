@@ -1,5 +1,11 @@
-var utilsAPI = require('./utils.js');
-var utils = new utilsAPI();
+// Check if running as Node
+var nodejs = false;
+if (typeof window === 'undefined') {
+	nodejs = true;
+	var utilsAPI = require('./utils.js');
+	var utils = new utilsAPI();
+	var document = {};
+}
 
 function boidie(bar) {
 	this.bar = bar;
