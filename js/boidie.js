@@ -48,7 +48,7 @@ boidie.prototype.eating = function() {
 boidie.prototype.working = function() {
 	this.energy--;
 	this.mateEnergy += 0.3;
-	console.log("Work energy: "+this.energy+" Mate energy:"+this.mateEnergy);
+	//console.log("Work energy: "+this.energy+" Mate energy:"+this.mateEnergy);
 	if(this.mateEnergy > 10) {
 		report(this.name + ": Start mating");
 		this.mateCount = 3;
@@ -108,7 +108,9 @@ boidie.prototype.create = function(db, mother, father) {
 				},
 				speed: {},
 				personality: {}
-			}
+			},
+			geneStr: "AaBbCcDd"
+
 		}
 	);
 	report("Added "+name);

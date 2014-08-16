@@ -14,7 +14,10 @@ if (typeof window === 'undefined') {
 	var boidies = new boidie();
 }
 
-var myDataRef = new Firebase('https://blinding-fire-4882.firebaseio.com/');
+// Setup reference to Firebase data source
+var dbSource = 'blinding-fire-4882';
+
+var myDataRef = new Firebase('https://'+dbSource+'.firebaseio.com/');
 var user = 'dan_';
 var creaturesRef = myDataRef.child(user + "creatures2");
 var actionRef = myDataRef.child("actions");
@@ -125,6 +128,8 @@ creaturesRef.on('child_added', function(snapshot) {
 		}
 	}
 	var boidieInstance = new boidie(snapshot.name());
+	var boidiesAccounts = ['MichaelDHyson', 'lynnmbessinger', 'halmrippetoe', 'jilliancmarotz'];
+	var boidieTwitter = boidiesAccounts[boidieNum %  boidiesAccounts.length];
 
 	boidieInstance.obj = snapshot.val();
 	document.boids[snapshot.name()] = boidieInstance;
@@ -139,7 +144,10 @@ creaturesRef.on('child_added', function(snapshot) {
 
 	//displayChatMessage(message.name, message.birthTime);
 	var out = '<div class="boid-row" id="'+snapshot.name()+'" style="top:'+ty+'px;left:'+tx+'px;">';
-	out += '<div class="boid-col boid-name"><a href="https://twitter.com/MichaelDHyson" target="_boidie">'+boid.name+'</a></div>';
+	out += '<div class="boid-col boid-name"><a href="https://twitter.com/'+boidieTwitter+'" target="_blank">'+boid.name+'</a></div>';
+	if(boid.geneStr != undefined) {
+		out += '<div class="boidie-genes">'+boid.geneStr+'</div>';
+	}
 	out += '<div class="boidie-msg" style="display:none;"></div>';
 	out += imageStr;
 	//out += "<div class='boid-col'>"+parseInt((boid.deathAge-boid.birthTime) / 60)+" minutes</div>";

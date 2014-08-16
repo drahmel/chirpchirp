@@ -48,6 +48,14 @@ body {
 	background: gray;
 	color:white;
 }
+.boidie-genes {
+	position: absolute;
+	left: 0;
+	bottom: -10;
+	background: lightgray;
+	color:white;
+	font-size:9px;
+}
 .gender {
 	float:left;
 	width: 12px;
