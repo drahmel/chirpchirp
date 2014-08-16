@@ -14,13 +14,17 @@ if (typeof window === 'undefined') {
 	var boidies = new boidie();
 }
 
+// TODO: Abstract all into config
 // Setup reference to Firebase data source
 var dbSource = 'blinding-fire-4882';
+var namespace = 'dan_';
+var chirpers = "creatures2";
+var actions = "actions";
+
 
 var myDataRef = new Firebase('https://'+dbSource+'.firebaseio.com/');
-var user = 'dan_';
-var creaturesRef = myDataRef.child(user + "creatures2");
-var actionRef = myDataRef.child("actions");
+var creaturesRef = myDataRef.child(namespace + chirpers);
+var actionRef = myDataRef.child(actions);
 var boidieNum = 0;
 var deadBoidies = 0;
 
@@ -40,7 +44,6 @@ Math.nrand = function(center, width) {
 };
 function showAlert(bid, msg)
 {
-	//bid = '-JUOw-EXpPi2lTV6Vva-';
 	$('#'+bid)
 		.find('.boidie-msg')
 		.html(msg)
