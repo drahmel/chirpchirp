@@ -1,9 +1,19 @@
+var nodejs = false;
+if (typeof window === 'undefined') {
+	nodejs = true;
+	var keysAPI = require('./keys.js');
+	var utilsAPI = require('./utils.js');
+	var utils = new utilsAPI();
+	var document = {};
+}
+
 var twitterAPI = require('./tweet.js');
 
 var boidiesAccounts = ['MichaelDHyson', 'lynnmbessinger', 'halmrippetoe', 'jilliancmarotz'];
 var num = Math.floor( Math.random() *  boidiesAccounts.length);
+var account = boidiesAccounts[num];
 
-var tweetr = new twitterAPI(boidiesAccounts[num]);
+var tweetr = new twitterAPI(account);
 var utilsAPI = require('./utils.js');
 var utils = new utilsAPI();
 
