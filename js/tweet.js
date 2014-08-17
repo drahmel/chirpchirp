@@ -89,7 +89,6 @@ tweet.prototype.doRetweet = function(id, callback) {
 		    console.log("Retweet Success!"+id);
 		    console.log(data);
 		}
-		process.exit();
 	    }
 	);
 }
@@ -101,6 +100,7 @@ tweet.prototype.doSearch = function(term, callback) {
 	this.twitter.search({
 		q: term,
 		count: 100,
+		lang: 'en',
 	    },
 	    this.keys.accessToken,
 	    this.keys.accessTokenSecret,
@@ -125,6 +125,7 @@ tweet.prototype.handleSearchResults = function(result) {
 	if(result['success']) {
 		var dups = {}
 		var alreadyRetweeted = false;
+		var threshold = 20;
 		if(false) {
 			console.log(result['data']);
 		}
@@ -146,12 +147,17 @@ tweet.prototype.handleSearchResults = function(result) {
 					console.log("...RETWEET of: "+ originalID);
 				}
 			}
+			var popularity = status['favorite_count'] + status['retweet_count'];
 			if(status['favorite_count'] > 0) {
 				console.log('...Favorited!!!');
 			}
 			if(status['retweet_count'] > 0) {
 				console.log('Retweeted '+status['retweet_count']+' times!!!');
-				if(!alreadyRetweeted && status['retweet_count'] > 20) {
+				if(!alreadyRetweeted && popularity > threshold) {
+					if(status['text'].toLowerCase().indexOf('nigga') != -1) {
+						continue;
+					}
+
 					alreadyRetweeted = true;
 					var id = status['id_str'];
 					if(originalID) {
@@ -169,7 +175,12 @@ tweet.prototype.handleSearchResults = function(result) {
 	}
 };
 
-tweet.prototype.retweetPopular = function(result) {
+tweet.prototype.retweetPopular = function(result, threshold) {
+	if(threshold == undefined) {
+		threshold = 20;
+	} else {
+		console.log("Custom threshold: " + threshold);
+	}
 	if(result['success']) {
 		var dups = {}
 		var alreadyRetweeted = false;
@@ -178,11 +189,13 @@ tweet.prototype.retweetPopular = function(result) {
 		}
 		var statuses = result['data']['statuses'];
 		for(var i in statuses) {
+			console.log("____________________________________________");
 			var originalID = 0;
 			var status = statuses[i];
 			var crc = utils.crc32(status['text']);
 			if(crc in dups) {
-				console.log("Dup");
+				console.log("Dup: " + status['text']);
+				continue;
 			} else {
 				dups[crc] = 1;
 			}
@@ -193,12 +206,16 @@ tweet.prototype.retweetPopular = function(result) {
 					console.log("...RETWEET of: "+ originalID);
 				}
 			}
+			var popularity = status['favorite_count'] + status['retweet_count'];
 			if(status['favorite_count'] > 0) {
 				console.log('...Favorited!!!');
 			}
 			if(status['retweet_count'] > 0) {
 				console.log('Retweeted '+status['retweet_count']+' times!!!');
-				if(!alreadyRetweeted && status['retweet_count'] > 20) {
+				if(!alreadyRetweeted && popularity > threshold) {
+					if(status['text'].toLowerCase().indexOf('nigga') != -1) {
+						continue;
+					}
 					alreadyRetweeted = true;
 					var id = status['id_str'];
 					if(originalID) {
