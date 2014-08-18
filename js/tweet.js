@@ -92,7 +92,25 @@ tweet.prototype.doRetweet = function(id, callback) {
 	    }
 	);
 }
-// cd /Users/Dan.Rahmel/Sites/chirpchirp;node js/twitterTest.js
+tweet.prototype.doFollow = function(id, callback) {
+	this.twitter.friendships("create", {
+		user_id: id
+	    },
+	    this.keys.accessToken,
+	    this.keys.accessTokenSecret,
+	    function(error, data, response) {
+		if (error) {
+			console.log("Follow Error!!!"+id);
+			console.log(error);
+		    // something went wrong
+		} else {
+		    // data contains the data sent by twitter
+		    console.log("Follow Success!"+id);
+		    console.log(data);
+		}
+	    }
+	);
+}
 
 //nytimes
 tweet.prototype.doSearch = function(term, callback) {
@@ -225,8 +243,13 @@ tweet.prototype.retweetPopular = function(result, threshold) {
 					this.retweetsRef.child(id).set({ name: true });
 					this.actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: status['text'], url: "halmrippetoe" });
 
-
-					this.doRetweet(id);
+					var followTweeter = Math.floor( Math.random() * 2);
+					console.log("Follow tweeter: " + followTweeter);
+					if(followTweeter) {
+						this.doFollow(status['user']['id_str']);
+					} else {
+						this.doRetweet(id);
+					}
 
 				}
 			}
