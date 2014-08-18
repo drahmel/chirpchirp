@@ -49,12 +49,13 @@ switch(cmd) {
 		var date = new Date();
 		var dateStr = "" + date.getFullYear()+(date.getMonth() + 1) + date.getDate();
 		var fname = "/data/chirpers_" + dateStr + ".log";
-		fs.writeFile(fname, "name\tfollowers\tfollowing\n", function (err) {
+		fs.writeFile(fname, "name\tfollowers\tfollowing\tfavorites\n", function (err) {
 			for(var i in boidiesAccounts) {
 				tweetr.doUsers(boidiesAccounts[i], function(out) {
 					if(out.success) {
 						var data = out['data'];
-						var msg = data['screen_name'] + "\t" + data['followers_count'] +  "\t" + data['friends_count'] + "\n";
+						//console.log(data);
+						var msg = data['screen_name'] + "\t" + data['followers_count'] +  "\t" + data['friends_count'] +  "\t" + data['favourites_count'] + "\n";
 						console.log(msg);
 						fs.appendFile(fname, msg, function (err) {
 							if (err) throw err;
