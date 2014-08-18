@@ -112,6 +112,32 @@ tweet.prototype.doFollow = function(id, callback) {
 	);
 }
 
+tweet.prototype.doUsers = function(id, callback) {
+	var out = {success:0, msg:''};
+	this.twitter.users("show", {
+		screen_name: id
+	    },
+	    this.keys.accessToken,
+	    this.keys.accessTokenSecret,
+	    function(error, data, response) {
+		if (error) {
+			console.log("users Error!!!"+id);
+			console.log(error);
+		    // something went wrong
+		} else {
+		    // data contains the data sent by twitter
+		    //console.log("users Success!"+id);
+		    //console.log(data);
+		    out['success'] = 1;
+		    out['data'] = data;
+		}
+		if(callback != undefined) {
+			callback(out);
+		}
+	    }
+	);
+}
+
 //nytimes
 tweet.prototype.doSearch = function(term, callback) {
 	var out = {success:0, msg:''};
