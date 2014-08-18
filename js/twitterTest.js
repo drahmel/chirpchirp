@@ -48,7 +48,7 @@ switch(cmd) {
 		console.log("User stats");
 		var date = new Date();
 		var dateStr = "" + date.getFullYear()+(date.getMonth() + 1) + date.getDate();
-		var fname = "/tmp/chirpers_" + dateStr + ".log";
+		var fname = "/data/chirpers_" + dateStr + ".log";
 		fs.writeFile(fname, "name\tfollowers\tfollowing\n", function (err) {
 			for(var i in boidiesAccounts) {
 				tweetr.doUsers(boidiesAccounts[i], function(out) {

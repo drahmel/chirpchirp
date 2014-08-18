@@ -92,6 +92,25 @@ tweet.prototype.doRetweet = function(id, callback) {
 	    }
 	);
 }
+tweet.prototype.doFavorite = function(id, callback) {
+	this.twitter.favorites("create", {
+		id: id
+	    },
+	    this.keys.accessToken,
+	    this.keys.accessTokenSecret,
+	    function(error, data, response) {
+		if (error) {
+			console.log("favorites Error!!!"+id);
+			console.log(error);
+		    // something went wrong
+		} else {
+		    // data contains the data sent by twitter
+		    console.log("favorites Success!"+id);
+		    console.log(data);
+		}
+	    }
+	);
+}
 tweet.prototype.doFollow = function(id, callback) {
 	this.twitter.friendships("create", {
 		user_id: id
@@ -269,12 +288,15 @@ tweet.prototype.retweetPopular = function(result, threshold) {
 					this.retweetsRef.child(id).set({ name: true });
 					this.actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: status['text'], url: "halmrippetoe" });
 
-					var followTweeter = Math.floor( Math.random() * 2);
-					console.log("Follow tweeter: " + followTweeter);
-					if(followTweeter) {
+					var bucket = Math.floor( Math.random() * 100);
+					console.log("*** Bucket tweeter: " + bucket);
+
+					if(bucket > 50) {
+						this.doRetweet(id);
+					} else if(bucket > 25) {
 						this.doFollow(status['user']['id_str']);
 					} else {
-						this.doRetweet(id);
+						this.doFavorite(id);
 					}
 
 				}
