@@ -26,10 +26,32 @@ var cmd = "tweet";
 if(arguments.length > 0) {
 	cmd = arguments[0];
 }
+function getStats(accounts, totalFollowers) {
+	if(accounts.length == 0) {
+		console.log("Done. "+totalFollowers+" total followers");
+		process.exit();
+	}
+	account = accounts.pop();
+	tweetr.doUsers(account, function(out) {
+		if(out.success) {
+			var data = out['data'];
+			//console.log(data);
+			totalFollowers += data['followers_count'];
+			var msg = data['screen_name'] + "\t" + data['followers_count'] +  "\t" + data['friends_count'] +  "\t" + data['favourites_count'] + "\n";
+			console.log(msg);
+			fs.appendFile(fname, msg, function (err) {
+				if (err) throw err;
+			});
+		}
+		getStats(accounts, totalFollowers);
+	});
+
+}
 console.log("Running command: " + cmd);
-setTimeout(function () { process.exit() }, 10000);
+//setTimeout(function () { process.exit() }, 10000);
 switch(cmd) {
 	case "tweet":
+		setTimeout(function () { process.exit() }, 10000);
 		var userInfo = keysObj.userInfo();
 		var threshold;
 		if("threshold" in userInfo) {
@@ -50,20 +72,7 @@ switch(cmd) {
 		var dateStr = "" + date.getFullYear()+(date.getMonth() + 1) + date.getDate();
 		var fname = "/data/chirpers_" + dateStr + ".log";
 		fs.writeFile(fname, "name\tfollowers\tfollowing\tfavorites\n", function (err) {
-			for(var i in boidiesAccounts) {
-				tweetr.doUsers(boidiesAccounts[i], function(out) {
-					if(out.success) {
-						var data = out['data'];
-						//console.log(data);
-						var msg = data['screen_name'] + "\t" + data['followers_count'] +  "\t" + data['friends_count'] +  "\t" + data['favourites_count'] + "\n";
-						console.log(msg);
-						fs.appendFile(fname, msg, function (err) {
-							if (err) throw err;
-							console.log('The "data to append" was appended to file!');
-						});
-					}
-				});
-			}
+			getStats(boidiesAccounts, 0);
 		});
 
 		//process.exit();
