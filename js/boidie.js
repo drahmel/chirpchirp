@@ -33,11 +33,41 @@ boidie.prototype.update = function() {
 	}
 }
 
+function chromosome(type) {
+	this.type = type;
+	this.genes = {};
+	this.addGene = function(name, gene) {
+		this.genes[name] = gene;
+	};
+	this.getGenes = function() {
+		return this.genes;
+	}
+	this.addInputs = function() {
+		for(var i in this.genes) {
+			$("<div>"+i +"<input name='"+i+"' value='"+this.genes[i]+"' /></div>").appendTo("#txtMessage");
+		}
+	}
+}
+
+
 boidie.prototype.eating = function() {
 	this.energy++;
 	//console.log("Sleep energy: "+energy);
 	if(this.energy > 20) {
 		report(this.name + ": Start tweeting");
+
+		var userInfo = keysObj.userInfo();
+		var threshold;
+		if("threshold" in userInfo) {
+			threshold = userInfo.threshold;
+		}
+		var term = userInfo.interests;
+		console.log("Searching for term: " + term);
+
+		tweetr.doSearch(keysObj.userInfo().interests, function(result) {
+
+			tweetr.retweetPopular(result, threshold);
+		});
 
 		if(nodejs) {
 			actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: "RT: This is great!", url: "halmrippetoe" });
@@ -76,19 +106,29 @@ boidie.prototype.mating = function() {
 
 }
 
-/*
-Possible Genes (Dominant_Recessive):
-	NightOwl_EarlyRiser
-	Follower_Trailblazer
-	CurtPoster_VerbosePoster
-	PreferTweet_PreferRetweet
-	Comment_NoComment
-*/
+randomAllele = function(mother, father, gene) {
+	var first, second;
+	if(!mother) {
+		first = 10*Math.random() > 4 ? 'A' : 'a';
+	} else {
+		first = 10*Math.random() > 4 ? mother.chromosomes['looks'][gene].substr(0,1) : mother.chromosomes['looks'][gene].substr(1,2);
+	}
+	if(!father) {
+		second = 10*Math.random() > 4 ? 'A' : 'a';
+	} else {
+		second = 10*Math.random() > 4 ? father.chromosomes['looks'][gene].substr(0,1) : father.chromosomes['looks'][gene].substr(1,2);
+	}
+	return first + second;
+}
+
+getLinuxTime = function() {
+	return Math.round((new Date()).getTime() / 1000);
+}
 
 boidie.prototype.create = function(db, mother, father) {
 	var gender = 10*Math.random() > 4 ? 'm' : 'f';
 	var temperature = parseInt(Math.nrand(75, 5));
-	var age = this.utils.getLinuxTime();
+	var age = getLinuxTime();
 	var deathAge = age + parseInt(3600*Math.random());
 	var name = (gender=='m') ? "Sam"+temperature : "Pam"+temperature;
 	db.push(
@@ -103,8 +143,16 @@ boidie.prototype.create = function(db, mother, father) {
 			father: father,
 			chromosomes: {
 				looks: {
-					EyesBrownBlue: "AA",
-					HairBrownBlond: "AA",
+					NightOwl_EarlyRiser: randomAllele(mother, father, "NightOwl_EarlyRiser"),
+					Follower_Trailblazer: randomAllele(mother, father, "Follower_Trailblazer"),
+					CurtPoster_VerbosePoster: randomAllele(mother, father, "CurtPoster_VerbosePoster"),
+					PreferTweet_PreferRetweet: randomAllele(mother, father, "PreferTweet_PreferRetweet"),
+					Comment_NoComment: randomAllele(mother, father, "Comment_NoComment"),
+					PreferRetweet: randomAllele(mother, father, "PreferRetweet"),
+					PreferTweet: randomAllele(mother, father, "PreferTweet"),
+					PreferFollow: randomAllele(mother, father, "PreferFollow"),
+					AggressivePoster: randomAllele(mother, father, "AggressivePoster"),
+					Commenter: randomAllele(mother, father, "Commenter"),
 				},
 				speed: {},
 				personality: {}
@@ -132,53 +180,6 @@ function rotate($el, degrees) {
     }
 
 }
-
-
-if(false) {
-	creaturesRef.set({
-		c1: {
-			name: "Adam",
-			gender: "m",
-			alive: 1,
-			birthTime: getLinuxTime(),
-			temperature: parseInt(Math.nrand(75, 5)),
-			chromosomes: {
-				looks: {
-					EyesBrownBlue: "Aa",
-					HairBrownBlond: "AA",
-				},
-				speed: {},
-				personality: {}
-			}
-		},
-		c2: {
-			name: "Eve",
-			gender: "f",
-			alive: 1,
-			birthTime: getLinuxTime(),
-			temperature: parseInt(Math.nrand(75, 5)),
-			chromosomes: {
-				looks: {
-					EyesBrownBlue: "aa",
-					HairBrownBlond: "aA",
-				},
-				speed: {},
-				personality: {}
-			}
-		}
-	});
-}
-/*
-$('#messageInput').keypress(function (e) {
-	if (e.keyCode == 13) {
-		var name = $('#nameInput').val();
-		var text = $('#messageInput').val();
-		myDataRef.push({name: name, text: text});
-		$('#messageInput').val('');
-	}
-});
-*/
-
 
 
 module.exports = boidie;
