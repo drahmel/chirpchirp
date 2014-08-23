@@ -2,11 +2,11 @@
 var nodejs = false;
 if (typeof window === 'undefined') {
 	nodejs = true;
+	var document = {};
 	var Firebase = require('firebase');
 	var fsmAPI = require('./finitestatemachine.js');
-	var boidieAPI = require('./boidie.js');
-	var document = {};
 	var fsm = new fsmAPI();
+	var boidieAPI = require('./boidie.js');
 	var boidies = new boidieAPI();
 } else {
 	var fsmAPI = finitestatemachine;
@@ -21,14 +21,16 @@ var namespace = 'dan_';
 var chirpers = "creatures2";
 var actions = "actions";
 
-
 var myDataRef = new Firebase('https://'+dbSource+'.firebaseio.com/');
 var creaturesRef = myDataRef.child(namespace + chirpers);
 var actionRef = myDataRef.child(actions);
 var boidieNum = 0;
 var deadBoidies = 0;
+var chromosomes = {};
+document.totalNum = 0;
 
 
+// _____________ Functions _____________
 function getLinuxTime() {
 	return Math.round((new Date()).getTime() / 1000);
 }
@@ -56,59 +58,40 @@ function report(msg) {
 	}
 }
 
-
-var chromosomes = {};
-
-
-function chromosome(type) {
-	this.type = type;
-	this.genes = {};
-	this.addGene = function(name, gene) {
-		this.genes[name] = gene;
-	};
-	this.getGenes = function() {
-		return this.genes;
-	}
-	this.addInputs = function() {
-		for(var i in this.genes) {
-			$("<div>"+i +"<input name='"+i+"' value='"+this.genes[i]+"' /></div>").appendTo("#txtMessage");
-		}
-	}
-}
-
-function idleBoidies() {
-	//console.log("Idle");
+function idleChirpers() {
+	console.log("____Start idle cycle");
 	var male = false;
 	var female = false;
 	if(Object.keys(document.boids).length < 2) {
-		//console.log("Create init");
-		for(var i=0;i<7;i++) {
+		console.log("No viable chirper population. Seeding new chirpers.");
+		for(var i=0;i<10;i++) {
 			boidies.create(creaturesRef, male, female);
 		}
 	}
 	for(var i in document.boids) {
 		document.boids[i].update();
-		/*
-		if(document.boids[i].gender == 'm') {
-			male = i;
-		} else {
-			female = i;
-		}
-		if(document.breed && male && female && (100*Math.random() < 5)) {
-			boidies.create(creaturesRef, male, female);
-
-			male = false;
-			female = false;
-		}
-		*/
 	}
-	//document.bee.update();
 }
+
+function displayChatMessage(name, text) {
+	$('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#noids'));
+	$('#noids')[0].scrollTop = $('#noids')[0].scrollHeight;
+};
+
+function startChirpers() {
+	document.boids = {};
+
+	setInterval(idleChirpers, 1000);
+}
+
+
+// _____________ Firebase events _____________
 
 creaturesRef.on('child_added', function(snapshot) {
 	var imageStr;
 	var boid = snapshot.val();
 	var age = getLinuxTime() - boid.deathAge;
+	document.totalNum++;
 	if(age > 0) {
 		if(deadBoidies > 10) {
 			return;
@@ -140,7 +123,6 @@ creaturesRef.on('child_added', function(snapshot) {
 	var marginTop = 100;
 	var row = parseInt(boidieNum / boidiesPerRow);
 	var col = boidieNum % boidiesPerRow;
-	//console.log(row + " / " + col);
 	var ty = (row*128) + marginTop;
 	var tx = (col*128);
 	boidieNum++;
@@ -153,10 +135,6 @@ creaturesRef.on('child_added', function(snapshot) {
 	}
 	out += '<div class="boidie-msg" style="display:none;"></div>';
 	out += imageStr;
-	//out += "<div class='boid-col'>"+parseInt((boid.deathAge-boid.birthTime) / 60)+" minutes</div>";
-	//out += "<div class='boid-col'>"+boid.temperature+" &deg;</div>";
-	//out += "<div class='boid-col'>"+boid.father+" </div>";
-	//out += "<div class='boid-col'>"+boid.mother+"</div>";
 	var live = 'alive';
 	if(getLinuxTime() > boid.deathAge) {
 		live = 'dead';
@@ -168,6 +146,7 @@ creaturesRef.on('child_added', function(snapshot) {
 		$("#txtMessage").text($('#noids').children('.boid-row').length + " boids");
 	}
 });
+
 actionRef.on('child_added', function(snapshot) {
 	var action = snapshot.val();
 	var msg = "<a href='https://twitter.com/"+action.url+"' target='_boidie'>" + action.msg.substr(0,80) + "</a>";
@@ -175,14 +154,10 @@ actionRef.on('child_added', function(snapshot) {
 	console.log(action);
 });
 
-function displayChatMessage(name, text) {
-	$('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#noids'));
-	$('#noids')[0].scrollTop = $('#noids')[0].scrollHeight;
-};
 
-//$(document).ready(function() {
-	document.boids = {};
-
-	setInterval(idleBoidies, 1000);
-//});
+if(nodejs) {
+	startChirpers();
+} else {
+	$(document).ready(startChirpers);
+}
 
