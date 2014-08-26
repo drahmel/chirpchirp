@@ -157,7 +157,6 @@ tweet.prototype.doUsers = function(id, callback) {
 	);
 }
 
-//nytimes
 tweet.prototype.doSearch = function(term, callback) {
 	var out = {success:0, msg:''};
 	this.twitter.search({
@@ -183,6 +182,31 @@ tweet.prototype.doSearch = function(term, callback) {
 	    }
 	);
 }
+
+tweet.prototype.checkMessages = function(callback) {
+	var out = {success:0, msg:''};
+	this.twitter.direct_messages('direct_messages', {
+		count: 100,
+	    },
+	    this.keys.accessToken,
+	    this.keys.accessTokenSecret,
+	    function(error, data, response) {
+		if (error) {
+			console.log(error);
+			out['msg'] = error;
+		    // something went wrong
+		} else {
+		    // data contains the data sent by twitter
+		    //console.log("Success!");
+		    //console.log(data);
+		    out['success'] = 1;
+		    out['data'] = data;
+		}
+		callback(out);
+	    }
+	);
+}
+
 
 tweet.prototype.handleSearchResults = function(result) {
 	if(result['success']) {
