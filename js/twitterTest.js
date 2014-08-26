@@ -1,24 +1,15 @@
 var nodejs = false;
 if (typeof window === 'undefined') {
 	nodejs = true;
+	var url = require('url')
 	var keysAPI = require('./keys.js');
 	var utilsAPI = require('./utils.js');
 	var utils = new utilsAPI();
+	var twitterAPI = require('./tweet.js');
 	var document = {};
 }
 
-var twitterAPI = require('./tweet.js');
 
-var keysObj = new keysAPI();
-var boidiesAccounts = keysObj.users();
-var num = Math.floor( Math.random() *  boidiesAccounts.length);
-var account = boidiesAccounts[num];
-if(false) {
-	account = 'kathrynsdonnate';
-}
-var keysObj = new keysAPI(account);
-
-var tweetr = new twitterAPI(account);
 
 var arguments = process.argv.slice(2);
 
@@ -26,9 +17,22 @@ var cmd = "tweet";
 if(arguments.length > 0) {
 	cmd = arguments[0];
 }
+
+var keysObj = new keysAPI();
+var boidiesAccounts = keysObj.users();
+var num = Math.floor( Math.random() *  boidiesAccounts.length);
+var account = boidiesAccounts[num];
+if(arguments.length > 1) {
+	account = arguments[1];
+}
+
+var keysObj = new keysAPI(account);
+
+var tweetr = new twitterAPI(account);
+
 function getStats(accounts, totalFollowers) {
 	if(accounts.length == 0) {
-		console.log("Done. "+totalFollowers+" total followers");
+		console.log("Done. "+totalFollowers+" total followers.");
 		process.exit();
 	}
 	account = accounts.pop();
@@ -77,6 +81,25 @@ switch(cmd) {
 
 		//process.exit();
 		break;
+	case "messages":
+		console.log("Checking Messages");
+		tweetr.checkMessages(function(result) {
+
+			//console.log(result);
+			var validation = 0;
+			if(result.success == 1) {
+				for(var i in result.data) {
+					var text = result.data[i].text;
+					if(text.indexOf("TrueTwit validation") != -1) {
+						console.log(result.data[i].text);
+						validation++;
+					}
+				}
+				console.log(result.data.length + " messages and " + validation + " requested validations");
+			}
+		});
+
+		break;
 	case "post":
 		console.log("Post");
 		doPost("The scale doesn't lie.");
@@ -86,5 +109,4 @@ switch(cmd) {
 		doRetweet('499919536263401473');
 		break;
 }
-//
 
