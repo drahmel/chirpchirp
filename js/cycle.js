@@ -2,8 +2,7 @@
 var nodejs = false;
 if (typeof window === 'undefined') {
 	nodejs = true;
-	var utils = require('./utils.js');
-	//var utils = new utilsAPI();
+	var Utils = require('./utils.js');
 	var Chirper = require('./chirper.js');
 	var Firebase = require('firebase');
 	var document = {};
@@ -32,7 +31,7 @@ ch = new Chirper()
 	.cycle();
 
 function idleChirpers() {
-	console.log("____Start idle cycle");
+	console.log("Idle cycle");
 	var male = false;
 	var female = false;
 	if(Object.keys(document.chirpers).length < 1) {
@@ -44,23 +43,29 @@ function idleChirpers() {
 		}
 	}
 	for(var i in document.chirpers) {
-		document.chirpers[i].update();
+		document.chirpers[i].cycle();
 	}
 }
 
 function startChirpers() {
-	document.chirpers = {};
 
 	setInterval(idleChirpers, 1000);
 }
+document.chirpers = {};
 
 creaturesRef.on('child_added', function(snapshot) {
-	console.log("Add");
+	var cdata = snapshot.val();
+
+	console.log("Relifing: " + cdata.name);
+	var ch = new Chirper()
+		.relife(cdata);
+
+	document.chirpers[cdata.name] = ch;
 });
 
 if(nodejs) {
 	console.log("Starting chirpers");
-	startChirpers();
+	setTimeout(startChirpers, 1000);
 } else {
 	$(document).ready(startChirpers);
 }
