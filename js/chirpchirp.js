@@ -37,8 +37,8 @@ function getLinuxTime() {
 Math.nrand = function(center, width) {
 	var x1, x2, rad, y1;
 	do {
-		x1 = 2 * this.random() - 1;
-		x2 = 2 * this.random() - 1;
+		x1 = 2 * Math.random() - 1;
+		x2 = 2 * Math.random() - 1;
 		rad = x1 * x1 + x2 * x2;
 	} while(rad >= 1 || rad == 0);
 	var c = this.sqrt(-2 * Math.log(rad) / rad);
@@ -62,14 +62,14 @@ function idleChirpers() {
 	console.log("____Start idle cycle");
 	var male = false;
 	var female = false;
-	if(Object.keys(document.boids).length < 2) {
+	if(Object.keys(document.chirpers).length < 2) {
 		console.log("No viable chirper population. Seeding new chirpers.");
 		for(var i=0;i<10;i++) {
 			boidies.create(creaturesRef, male, female);
 		}
 	}
-	for(var i in document.boids) {
-		document.boids[i].update();
+	for(var i in document.chirpers) {
+		document.chirpers[i].update();
 	}
 }
 
@@ -79,7 +79,7 @@ function displayChatMessage(name, text) {
 };
 
 function startChirpers() {
-	document.boids = {};
+	document.chirpers = {};
 
 	setInterval(idleChirpers, 1000);
 }
@@ -118,7 +118,7 @@ creaturesRef.on('child_added', function(snapshot) {
 	var boidieTwitter = boidiesAccounts[boidieNum %  boidiesAccounts.length];
 
 	boidieInstance.obj = snapshot.val();
-	document.boids[snapshot.name()] = boidieInstance;
+	document.chirpers[snapshot.name()] = boidieInstance;
 	var boidiesPerRow = 12;
 	var marginTop = 100;
 	var row = parseInt(boidieNum / boidiesPerRow);
@@ -149,7 +149,7 @@ creaturesRef.on('child_added', function(snapshot) {
 
 actionRef.on('child_added', function(snapshot) {
 	var action = snapshot.val();
-	var msg = "<a href='https://twitter.com/"+action.url+"' target='_boidie'>" + action.msg.substr(0,80) + "</a>";
+	var msg = "<a href='https://twitter.com/" + action.url + "' target='_boidie'>" + action.msg.substr(0,80) + "</a>";
 	showAlert(action.bid, msg);
 	console.log(action);
 });
