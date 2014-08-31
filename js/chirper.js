@@ -30,14 +30,11 @@ chirper.prototype.setState = function(state) {
 	this.stateCycles = 0;
 }
 
-chirper.prototype.update = function() {
+chirper.prototype.cycle = function() {
 	if(this.activeState != undefined) {
 		this.stateCycles++;
 		this.activeState();
 	}
-}
-
-chirper.prototype.cycle = function() {
 	return this;
 }
 
@@ -52,7 +49,10 @@ chirper.prototype.father = function() {
 chirper.prototype.mother = function() {
 	return this;
 }
-
+chirper.prototype.relife = function(cdata) {
+	this.cdata = cdata;
+	return this;
+}
 chirper.prototype.eating = function() {
 	this.energy++;
 	//console.log("Sleep energy: "+energy);
