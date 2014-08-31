@@ -56,8 +56,9 @@ document.chirpers = {};
 creaturesRef.on('child_added', function(snapshot) {
 	var cdata = snapshot.val();
 
-	console.log("Relifing: " + cdata.name);
+	console.log("Relifing: " + snapshot.name()); //cdata.name);
 	var ch = new Chirper()
+		.db(creaturesRef, snapshot.name())
 		.relife(cdata);
 
 	document.chirpers[cdata.name] = ch;

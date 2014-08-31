@@ -15,6 +15,7 @@ function chirper(name) {
 	this.setState(this.working);
 	this.stateCycles = 0;
 	this.utils = utils;
+	this.cdata = {};
 
 	this.blank = {
 		firstName: '',
@@ -31,6 +32,19 @@ chirper.prototype.setState = function(state) {
 }
 
 chirper.prototype.cycle = function() {
+	if(typeof this.cdata.cycles == "undefined") {
+		this.cdata.cycles = 0;
+	}
+	this.cdata.cycles++;
+
+	if(this.cdb) {
+		var updates = { cycles: this.cdata.cycles };
+		if(utils.getLinuxTime() > this.cdata.deathAge) {
+			updates.alive = 0;
+		}
+		this.cdb.update(updates);
+	}
+
 	if(this.activeState != undefined) {
 		this.stateCycles++;
 		this.activeState();
@@ -49,6 +63,13 @@ chirper.prototype.father = function() {
 chirper.prototype.mother = function() {
 	return this;
 }
+chirper.prototype.db = function(db, name) {
+	var creaturesRef = db.child(name);
+
+	this.cdb = creaturesRef;
+	return this;
+}
+
 chirper.prototype.relife = function(cdata) {
 	this.cdata = cdata;
 	return this;
