@@ -38,7 +38,7 @@ chirper.prototype.cycle = function() {
 	this.cdata.cycles++;
 
 	if(this.cdb) {
-		var updates = { cycles: this.cdata.cycles };
+		var updates = { cycles: this.cdata.cycles, stateCycles: this.stateCycles };
 		if(utils.getLinuxTime() > this.cdata.deathAge) {
 			updates.alive = 0;
 		}
@@ -78,7 +78,7 @@ chirper.prototype.eating = function() {
 	this.energy++;
 	//console.log("Sleep energy: "+energy);
 	if(this.energy > 20) {
-		report(this.name + ": Start tweeting");
+		utils.report(this.name + ": Start tweeting");
 
 		var userInfo = keysObj.userInfo();
 		var threshold;
@@ -104,11 +104,11 @@ chirper.prototype.working = function() {
 	this.mateEnergy += 0.3;
 	//console.log("Work energy: "+this.energy+" Mate energy:"+this.mateEnergy);
 	if(this.mateEnergy > 10) {
-		report(this.name + ": Start mating");
+		utils.report(this.name + ": Start mating");
 		this.mateCount = 3;
 		this.setState(this.mating);
 	} else if(this.energy < 10) {
-		report(this.name + ": Start eating");
+		utils.report(this.name + ": Start eating");
 		this.setState(this.eating);
 	}
 }
@@ -119,10 +119,10 @@ chirper.prototype.mating = function() {
 	this.mateCount--;
 	if(this.mateCount < 1) {
 		this.mateEnergy = 0.0;
-		report(this.name + ": Start eating");
+		utils.report(this.name + ": Start eating");
 		this.setState(this.eating);
 	} else if(this.mateCount == 1) {
-		report(this.name + ": Available for mating");
+		utils.report(this.name + ": Available for mating");
 		var male = false;
 		var female = false;
 		this.create(male, female);
