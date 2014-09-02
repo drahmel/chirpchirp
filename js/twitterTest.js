@@ -51,10 +51,40 @@ function getStats(accounts, totalFollowers) {
 	});
 
 }
+function getMessages(accounts, totalMessages) {
+	if(accounts.length == 0) {
+		console.log("Done. "+totalMessages+" total messages.");
+		process.exit();
+	}
+	account = accounts.pop();
+	var tweetr = new twitterAPI(account);
+	console.log("___________ Checking " + account + " ___________");
+
+	tweetr.checkMessages(function(result) {
+		//console.log(result);
+		var validation = 0;
+		if(result.success == 1) {
+			for(var i in result.data) {
+				var text = result.data[i].text;
+				if(text.indexOf("TrueTwit validation") != -1) {
+					console.log(result.data[i].created_at);
+					console.log(result.data[i].text);
+					validation++;
+				}
+			}
+			console.log(result.data.length + " messages and " + validation + " requested validations");
+			totalMessages++;
+		}
+		getMessages(accounts, totalMessages);
+	});
+
+}
+
 console.log("Running command: " + cmd);
 //setTimeout(function () { process.exit() }, 10000);
 switch(cmd) {
 	case "tweet":
+		console.log("Tweeting on account: " + account);
 		setTimeout(function () { process.exit() }, 10000);
 		var userInfo = keysObj.userInfo();
 		var threshold;
@@ -81,6 +111,10 @@ switch(cmd) {
 
 		//process.exit();
 		break;
+	case "monitor":
+		getMessages(boidiesAccounts, 0);
+		break;
+
 	case "messages":
 		console.log("Checking Messages");
 		tweetr.checkMessages(function(result) {
@@ -91,12 +125,14 @@ switch(cmd) {
 				for(var i in result.data) {
 					var text = result.data[i].text;
 					if(text.indexOf("TrueTwit validation") != -1) {
+						console.log(result.data[i].created_at);
 						console.log(result.data[i].text);
 						validation++;
 					}
 				}
 				console.log(result.data.length + " messages and " + validation + " requested validations");
 			}
+			process.exit();
 		});
 
 		break;
