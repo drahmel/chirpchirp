@@ -59,6 +59,7 @@ function getMessages(accounts, totalMessages) {
 	account = accounts.pop();
 	var tweetr = new twitterAPI(account);
 	console.log("___________ Checking " + account + " ___________");
+	var normalMsg = 0;
 
 	tweetr.checkMessages(function(result) {
 		//console.log(result);
@@ -67,9 +68,15 @@ function getMessages(accounts, totalMessages) {
 			for(var i in result.data) {
 				var text = result.data[i].text;
 				if(text.indexOf("TrueTwit validation") != -1) {
-					console.log(result.data[i].created_at);
-					console.log(result.data[i].text);
+					if(validation<2) {
+						console.log("VALIDATE: " + result.data[i].created_at + ":" + result.data[i].text);
+					}
 					validation++;
+				} else {
+					if(normalMsg<2) {
+						console.log(result.data[i].created_at + ":" + result.data[i].text);
+					}
+					normalMsg++;
 				}
 			}
 			console.log(result.data.length + " messages and " + validation + " requested validations");
