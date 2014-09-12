@@ -46,6 +46,11 @@ utils.prototype.report = function(msg) {
 	}
 }
 
+utils.prototype.parseTwitterDateStr = function(datestr) {
+	var woday = datestr.replace(/(\+\S+) (.*)/, '$2 $1')
+	var d = new Date(Date.parse(woday));
+	return d;
+}
 
 module.exports = utils;
 
