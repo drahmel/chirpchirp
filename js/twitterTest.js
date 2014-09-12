@@ -52,6 +52,8 @@ function getStats(accounts, totalFollowers) {
 
 }
 function getMessages(accounts, totalMessages) {
+	var yesterday = new Date();
+	yesterday.setDate(yesterday.getDate() - 1);
 	if(accounts.length == 0) {
 		console.log("Done. "+totalMessages+" total messages.");
 		process.exit();
@@ -67,13 +69,18 @@ function getMessages(accounts, totalMessages) {
 		if(result.success == 1) {
 			for(var i in result.data) {
 				var text = result.data[i].text;
+				var postDate = utils.parseTwitterDateStr(result.data[i].created_at);
+				var report = false;
+				if(postDate > yesterday) {
+					report = true;
+				}
 				if(text.indexOf("TrueTwit validation") != -1) {
-					if(validation<2) {
+					if(report) {
 						console.log("VALIDATE: " + result.data[i].created_at + ":" + result.data[i].text);
 					}
 					validation++;
 				} else {
-					if(normalMsg<2) {
+					if(report) {
 						console.log(result.data[i].created_at + ":" + result.data[i].text);
 					}
 					normalMsg++;
