@@ -80,21 +80,22 @@ chirper.prototype.eating = function() {
 	if(this.energy > 20) {
 		utils.report(this.name + ": Start tweeting");
 
-		var userInfo = keysObj.userInfo();
-		var threshold;
-		if("threshold" in userInfo) {
-			threshold = userInfo.threshold;
-		}
-		var term = userInfo.interests;
-		console.log("Searching for term: " + term);
+		if(false) {
+			var userInfo = keysObj.userInfo();
+			var threshold;
+			if("threshold" in userInfo) {
+				threshold = userInfo.threshold;
+			}
+			var term = userInfo.interests;
+			console.log("Searching for term: " + term);
+			tweetr.doSearch(keysObj.userInfo().interests, function(result) {
 
-		tweetr.doSearch(keysObj.userInfo().interests, function(result) {
+				tweetr.retweetPopular(result, threshold);
+			});
 
-			tweetr.retweetPopular(result, threshold);
-		});
-
-		if(nodejs) {
-			actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: "RT: This is great!", url: "halmrippetoe" });
+			if(nodejs) {
+				actionRef.push({ bid: '-JUPIlRMOl-KiCQXUbRb', type: "tweet", msg: "RT: This is great!", url: "halmrippetoe" });
+			}
 		}
 		this.setState(this.working);
 	}
