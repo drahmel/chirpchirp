@@ -2,17 +2,58 @@
   <head>
   	<title>Chirp Chirp</title>
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+
+    <script>
+    AFRAME.registerComponent('log', {
+      schema: {type: 'string'},
+
+      init: function () {
+        var stringToLog = this.data;
+        console.log(stringToLog);
+        var entityEl = document.querySelector('#body');
+        var cycle = 1;
+        var count = 0;
+        setInterval(function() {
+            cycle *= -1;
+            if(cycle > 0) {
+              entityEl.setAttribute('color', 'yellow');
+            } else {
+              entityEl.setAttribute('color', 'blue');
+            }
+            count += 1;
+            if(count % 5 == 0) {
+              var sceneEl = document.querySelector('a-scene');
+              var el = document.createElement('a-sphere');
+              el.setAttribute('color', 'red');
+              el.setAttribute('radius', '0.5');
+              el.setAttribute('position', "-1 "+(.25*count)+" -3");
+
+              sceneEl.appendChild(el);
+              console.log("Append sphere");
+            }
+        }, 3000);
+      }
+    });
+    </script>
+
+    <!-- script type="text/javascript" src="js/boidie.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/finitestatemachine.js"></script>
+    <script type="text/javascript" src="js/chirpchirp.js"></script -->
   </head>
   <body>
     <a-scene>
+
+      <a-text value="Hello, World!" position="-1 3.5 -3"  color="black"></a-text>
       <a-entity  id="robot">
         <a-box id="body" position="-1 1.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
         <a-sphere position="-1 2.5 -3" radius=".5" color="orange"></a-sphere>
       </a-entity>
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
       <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-      <a-sky color="#ECECEC"></a-sky>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="140" height="140" color="#7BC8A4"></a-plane>
+      <a-sky  color="blue"></a-sky>
+        <a-box log="Hello, Box!"></a-box>
     </a-scene>
   </body>
 </html>
