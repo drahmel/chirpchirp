@@ -4,6 +4,7 @@
   "description": "Genetic modeling",
   "main": "webserver.js",
   "dependencies": {
+    "express": "^4.16.3",
     "firebase": "^1.2.0",
     "node-twitter-api": "^1.2.3"
   },

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xml:lang="en" lang="en">
+<head>
+	<title>Finite State Machine</title>
+	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+	<link href="css/chirpchirp.css" rel="stylesheet">
+	<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+
+	<link rel="icon" href="images/favicon.png" type="image/png" />
+	<link rel="apple-touch-icon" href="/images/favicon.png" />
+
+	<script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+</head>
+<body>
+	<div class="container-fluid" style="min-height:800px;">
+		<div class="row-fluid" style="min-height:400px;width:6000px;display:relative;">
+			<div class="span12" id="txtMain" style="background:lightblue;"></div>
+		</div>
+		<div class="row-fluid" style="min-height:400px;width:6000px;display:relative;">
+			<div style="width:100%"  id="noids">
+				<div id="noids" style="display:relative;"></div>
+			</div>
+		</div>
+	</div>
+	<div id='messagesDiv'></div>
+	<input type='text' id='nameInput' placeholder='Name'>
+	<input type='text' id='messageInput' placeholder='Message'>
+	<button class="btn" id="addCreature">Add Creature</button>
+<script>
+module = {};
+</script>
+<script type="text/javascript" src="js/boidie.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="js/finitestatemachine.js"></script>
+<script type="text/javascript" src="js/chirpchirp.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	//var myAnt = new ant();
+	$("<div>Hello</div>").appendTo("#txtMessage");
+	chromosomes['looks'] = new chromosome('looks');
+	chromosomes['looks'].addGene('EyesBrownBlue', 'Aa');
+	chromosomes['looks'].addGene('HairBrownBlond', 'AA');
+	chromosomes['speed'] = new chromosome('speed');
+	chromosomes['personality'] = new chromosome('personality');
+	console.log(chromosomes);
+	chromosomes['looks'].addInputs();
+});
+
+$('#addCreature').click(function (e) {
+	if(false) {
+		creaturesRef.update({
+			c3: {
+				name: "Harry",
+				gender: "m",
+				alive: 1,
+				birthTime: getLinuxTime(),
+				temperature: parseInt(Math.nrand(75, 5)),
+				chromosomes: {
+					looks: {
+						EyesBrownBlue: "AA",
+						HairBrownBlond: "AA",
+					},
+					speed: {},
+					personality: {}
+				}
+			},
+		});
+	} else {
+		creaturesRef.push(
+			{
+				name: "Pam",
+				gender: "f",
+				alive: 1,
+				birthTime: getLinuxTime(),
+				temperature: parseInt(Math.nrand(75, 5)),
+				chromosomes: {
+					looks: {
+						EyesBrownBlue: "AA",
+						HairBrownBlond: "AA",
+					},
+					speed: {},
+					personality: {}
+				}
+			}
+		);
+
+	}
+
+});
+
+</script>
+      </body>
+</html>
+
