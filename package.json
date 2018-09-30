@@ -1,0 +1,29 @@
+{
+  "name": "chirpchirp",
+  "version": "1.0.0",
+  "description": "Genetic modeling",
+  "main": "webserver.js",
+  "dependencies": {
+    "firebase": "^1.2.0",
+    "node-twitter-api": "^1.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drahmel/chirpchirp.git"
+  },
+  "keywords": [
+    "vr",
+    "genetics",
+    "world"
+  ],
+  "author": "Dan Rahmel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drahmel/chirpchirp/issues"
+  },
+  "homepage": "https://github.com/drahmel/chirpchirp#readme"
+}
