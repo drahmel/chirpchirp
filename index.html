@@ -2,6 +2,7 @@
   <head>
   	<title>Chirp Chirp</title>
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
 
     <script>
     AFRAME.registerComponent('log', {
@@ -50,10 +51,18 @@
         <a-sphere position="-1 2.5 -3" radius=".5" color="orange"></a-sphere>
       </a-entity>
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="140" height="140" color="#7BC8A4"></a-plane>
+
+      <!-- Monument in the distance -->
+      <a-cylinder position="1 9 -200" radius="50" height="100" color="#F8D093"></a-cylinder>
+
+
+      <!-- a-plane position="0 0 -4" rotation="-90 0 0" width="140" height="140" color="#FEF1CE"></a-plane -->
       <a-sky  color="blue"></a-sky>
-        <a-box log="Hello, Box!"></a-box>
+      <a-box log="Hello, Box!"></a-box>
+      <a-entity environment="preset: forest; dressingAmount: 500"></a-entity>
+		<!-- a-light type="ambient" color="#445451"></a-light>
+		<a-light type="point" intensity="2" position="2 4 4"></a-light -->
+
     </a-scene>
   </body>
 </html>
