@@ -8,6 +8,8 @@ Using an genetic algo has the following advantages:
 
 # A-Frame Interface
 
+Adding an A-Frame interface
+
 [[https://github.com/drahmel/chirpchirp/blob/master/images/desert.png|alt=A-Frame]]
 
 
