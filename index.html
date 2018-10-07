@@ -1,6 +1,6 @@
 <html>
   <head>
-  	<title>Chirp Chirp</title>
+  	<title>NQLiving World v1</title>
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
 
@@ -59,10 +59,14 @@
       <!-- a-plane position="0 0 -4" rotation="-90 0 0" width="140" height="140" color="#FEF1CE"></a-plane -->
       <a-sky  color="blue"></a-sky>
       <a-box log="Hello, Box!"></a-box>
-      <a-entity environment="preset: forest; dressingAmount: 500"></a-entity>
+
+      <!-- a-entity environment="preset: forest; dressingAmount: 500"></a-entity -->
+      <a-entity environment="preset: egypt; dressingAmount: 5"></a-entity>
 		<!-- a-light type="ambient" color="#445451"></a-light>
 		<a-light type="point" intensity="2" position="2 4 4"></a-light -->
-
+		<a-camera  position="0 1 0">
+			<a-cursor></a-cursor>
+		</a-camera>
     </a-scene>
   </body>
 </html>

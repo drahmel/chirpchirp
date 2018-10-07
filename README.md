@@ -6,9 +6,9 @@ Using an genetic algo has the following advantages:
 * Recessive traits remain in the gene pool for later expression as conditions change
 * Iterations self-select for best (most successful traits)
 
-## Getting Started -- Running in a browser
+# A-Frame Interface
 
-Since ChirpChirp uses Firebase for data storage, it can be run even from a file in a web browser.
+[[https://github.com/drahmel/chirpchirp/blob/master/images/desert.png|alt=A-Frame]]
 
 
 ## Getting Started -- Running at the command line
