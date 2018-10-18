@@ -45,7 +45,7 @@
   <body>
     <a-scene>
 
-      <a-text value="Hello, World!" position="-1 3.5 -3"  color="black"></a-text>
+      <a-text value="Welcome to NQ Living" position="-1 3.5 -3"  color="black"></a-text>
       <a-entity  id="robot">
         <a-box id="body" position="-1 1.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
         <a-sphere position="-1 2.5 -3" radius=".5" color="orange"></a-sphere>
@@ -60,8 +60,17 @@
       <a-sky  color="blue"></a-sky>
       <a-box log="Hello, Box!"></a-box>
 
+<?php
+$es = array(
+	"contact", " egypt", " checkerboard", " forest", " goaland", " yavapai", " goldmine", " threetowers", " poison", " arches", " tron", " japan", " dream", " volcano", " starry", " osiris"
+);
+$environmentNum = rand(0, count($es)-1);
+$environment = $es[$environmentNum];
+
+
+?>
       <!-- a-entity environment="preset: forest; dressingAmount: 500"></a-entity -->
-      <a-entity environment="preset: egypt; dressingAmount: 5"></a-entity>
+      <a-entity environment="preset: <?php echo $environment; ?>; dressingAmount: 5"></a-entity>
 		<!-- a-light type="ambient" color="#445451"></a-light>
 		<a-light type="point" intensity="2" position="2 4 4"></a-light -->
 		<a-camera  position="0 1 0">
